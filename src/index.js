@@ -8,28 +8,33 @@ import { Router, Route, BrowserRouter, Routes} from 'react-router-dom';
 // import createHistory from 'history/createBrowserHistory';
 import { createBrowserHistory } from 'history';
 import { firebaseApp } from './firebase';
-import App from './App';
+
 
 import Log from './components/Log';
 import Profile from './components/Profile';
 import Register from './components/Register';
 import SignIn from './components/SignIn';
 import Welcome from './components/Welcome';
+import reducer from './reducers';
+import { updateUser } from './actions';
 
 const history = createBrowserHistory();
 
 firebaseApp.auth().onAuthStateChanged(user => {
   if(user) {
+    const { email } = user;
+    store.dispatch(updateUser(email))
     console.log('logged in');
     history.push('/log');
   }
   else {
     console.log('no user found');
-    history.replace('/')
+    history.replace('/register')
   }
 })
 
-// const store = createStore(reducer); // Create reducers
+
+const store = createStore(reducer); // Create reducers
 
 // const root = createRoot(document.getElementById("root"));
 // root.render(
@@ -50,7 +55,7 @@ firebaseApp.auth().onAuthStateChanged(user => {
 
 ReactDOM.render(
 <React.StrictMode>
-  {/* <Provider store={store}> */}
+  <Provider store={store}>
     <BrowserRouter history={createBrowserHistory}>
     <Routes>
       <Route exact path="/" element={<Welcome/>} />
@@ -60,7 +65,7 @@ ReactDOM.render(
       <Route exact path="/register" element={<Register/>} />
       </Routes>
     </BrowserRouter>
-  {/* </Provider> */}
+  </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

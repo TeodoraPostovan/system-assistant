@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { updateUser } from '../actions';
 import { firebaseApp } from '../firebase';
 
 class Register extends Component {
@@ -15,11 +17,13 @@ class Register extends Component {
     
         register(){
             const { email, password } = this.state;
+            this.props.updateUser(email);
             firebaseApp.auth().createUserWithEmailAndPassword(email, password).catch(error => {this.setState({error})})
         }
     
 
     render () {
+        console.log(this.props)
         return (
             <div className='register-form'>
                 <h2>Register</h2>
@@ -49,4 +53,4 @@ class Register extends Component {
     }
 }
 
-export default Register;
+export default connect(null, { updateUser })(Register);

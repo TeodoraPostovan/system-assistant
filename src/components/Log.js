@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { firebaseApp } from '../firebase';
 
 class Log extends Component {
-    signOut() {
-        firebaseApp.auth.signOut();
-    }
+    // signOut() {
+    //     firebaseApp.auth.signOut();
+    // }
 
     render() {
+        console.log(this.props)
         return(
             <div>
                 <h2> Log page</h2>
@@ -20,4 +22,10 @@ class Log extends Component {
     }
 }
 
-export default Log;
+function mapStateProps(state) {
+    return{
+        state
+    }
+}
+
+export default connect(mapStateProps, null)(Log);
