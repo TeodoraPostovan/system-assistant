@@ -1,13 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-// import './index.css';
-import App from './App';
+import { legacy_createStore as createStore} from 'redux'
+import { Provider } from 'react-redux';
+import { Router, Route} from 'react-router';
+import { createBrowserHistory } from 'history'
+import { firebaseApp } from './firebase';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const myStore = createStore(reducer);
+
+ReactDOM.render(
+  <Provider myStore={myStore}>
+    <Router path="/" history={createBrowserHistory}>
+      <Route path="/log" component={Log} />
+      <Route path="/profile" component={Profile} />
+      <Route path="/signin" component={SignIn} />
+      <Route path="/register" component={Register} />
+    </Router>
+  </Provider>
+)
 
 
