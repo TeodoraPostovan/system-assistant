@@ -10,12 +10,14 @@ import LogIn from './components/LogIn';
 import Profile from './components/Profile';
 import Register from './components/Register';
 import SignIn from './components/SignIn';
+import Welcome from './components/Welcome';
 
-const store = createStore(reducer);
+const store = createStore(reducer); // Create reducers
 
 ReactDOM.render(
   <Provider store={store}>
     <Router path="/" history={createBrowserHistory}>
+      <Route path="/" component={Welcome} />
       <Route path="/log" component={LogIn} />
       <Route path="/profile" component={Profile} />
       <Route path="/signin" component={SignIn} />
