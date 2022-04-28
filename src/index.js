@@ -18,7 +18,7 @@ import Welcome from './components/Welcome';
 import reducer from './reducers';
 import { updateUser } from './actions';
 
-const history = createBrowserHistory();
+const history = createBrowserHistory(); // updating url but not redirecting-bug
 
 firebaseApp.auth().onAuthStateChanged(user => {
   if(user) {
@@ -56,12 +56,12 @@ const store = createStore(reducer); // Create reducers
 ReactDOM.render(
 <React.StrictMode>
   <Provider store={store}>
-    <BrowserRouter history={createBrowserHistory}>
+    <BrowserRouter history={history}>
     <Routes>
       <Route exact path="/" element={<Welcome/>} />
       <Route exact path="/log" element={<Log/>} />
       <Route exact path="/profile" element={<Profile/>} />
-      <Route exact path="/signin" element={<SignIn/>} />
+      {/* <Route exact path="/signin" element={<SignIn/>} /> */}
       <Route exact path="/register" element={<Register/>} />
       </Routes>
     </BrowserRouter>
@@ -69,6 +69,8 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+
 
 
 
