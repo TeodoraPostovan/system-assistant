@@ -10,7 +10,7 @@ import { createBrowserHistory } from 'history';
 import { firebaseApp } from './firebase';
 
 
-import Log from './components/Log';
+import Login from './components/Login';
 import Profile from './components/Profile';
 import Register from './components/Register';
 import SignIn from './components/SignIn';
@@ -59,7 +59,7 @@ ReactDOM.render(
     <BrowserRouter history={history}>
     <Routes>
       <Route exact path="/" element={<Welcome/>} />
-      <Route exact path="/log" element={<Log/>} />
+      <Route exact path="/log" element={<Login/>} />
       <Route exact path="/profile" element={<Profile/>} />
       {/* <Route exact path="/signin" element={<SignIn/>} /> */}
       <Route exact path="/register" element={<Register/>} />
