@@ -1,6 +1,7 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
+  "extends": ["prettier"],
   "plugins": ["@nrwl/nx", "simple-import-sort", "prettier"],
   "overrides": [
     {

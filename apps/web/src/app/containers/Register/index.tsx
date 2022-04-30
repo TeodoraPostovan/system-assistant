@@ -1,22 +1,11 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {
-  Box,
-  Button,
-  Checkbox,
-  Container,
-  FormHelperText,
-  Link as LinkUI,
-  TextField,
-  Typography
-} from '@mui/material';
+import { Box, Button, Checkbox, Container, FormHelperText, Link as LinkUI, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
-
 const Register = () => {
-  // const router = useRouter();
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -26,37 +15,14 @@ const Register = () => {
       policy: false
     },
     validationSchema: Yup.object({
-      email: Yup
-        .string()
-        .email(
-          'Must be a valid email')
-        .max(255)
-        .required(
-          'Email is required'),
-      firstName: Yup
-        .string()
-        .max(255)
-        .required(
-          'First name is required'),
-      lastName: Yup
-        .string()
-        .max(255)
-        .required(
-          'Last name is required'),
-      password: Yup
-        .string()
-        .max(255)
-        .required(
-          'Password is required'),
-      policy: Yup
-        .boolean()
-        .oneOf(
-          [true],
-          'This field must be checked'
-        )
+      email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+      firstName: Yup.string().max(255).required('First name is required'),
+      lastName: Yup.string().max(255).required('Last name is required'),
+      password: Yup.string().max(255).required('Password is required'),
+      policy: Yup.boolean().oneOf([true], 'This field must be checked')
     }),
     onSubmit: () => {
-      router.push('/')
+      navigate('/');
     }
   });
 
@@ -71,29 +37,17 @@ const Register = () => {
       }}
     >
       <Container maxWidth="sm">
-        <Link
-          to="/"
-        >
-          <Button
-            component="a"
-            startIcon={<ArrowBackIcon fontSize="small" />}
-          >
+        <Link to="/">
+          <Button component="button" startIcon={<ArrowBackIcon fontSize="small" />}>
             Dashboard
           </Button>
         </Link>
         <form onSubmit={formik.handleSubmit}>
           <Box sx={{ my: 3 }}>
-            <Typography
-              color="textPrimary"
-              variant="h4"
-            >
+            <Typography color="textPrimary" variant="h4">
               Create a new account
             </Typography>
-            <Typography
-              color="textSecondary"
-              gutterBottom
-              variant="body2"
-            >
+            <Typography color="textSecondary" gutterBottom variant="body2">
               Use your email to create a new account
             </Typography>
           </Box>
@@ -154,35 +108,16 @@ const Register = () => {
               ml: -1
             }}
           >
-            <Checkbox
-              checked={formik.values.policy}
-              name="policy"
-              onChange={formik.handleChange}
-            />
-            <Typography
-              color="textSecondary"
-              variant="body2"
-            >
-              I have read the
-              {' '}
-              <NextLink
-                href="#"
-                passHref
-              >
-                <Link
-                  color="primary"
-                  underline="always"
-                  variant="subtitle2"
-                >
-                  Terms and Conditions
-                </Link>
-              </NextLink>
+            <Checkbox checked={formik.values.policy} name="policy" onChange={formik.handleChange} />
+            <Typography color="textSecondary" variant="body2">
+              I have read the{' '}
+              <LinkUI color="primary" underline="always" variant="subtitle2" component={Link} to="#">
+                Terms and Conditions
+              </LinkUI>
             </Typography>
           </Box>
           {Boolean(formik.touched.policy && formik.errors.policy) && (
-            <FormHelperText error>
-              {formik.errors.policy}
-            </FormHelperText>
+            <FormHelperText error>{formik.errors.policy}</FormHelperText>
           )}
           <Box sx={{ py: 2 }}>
             <Button
@@ -196,23 +131,11 @@ const Register = () => {
               Sign Up Now
             </Button>
           </Box>
-          <Typography
-            color="textSecondary"
-            variant="body2"
-          >
-            Have an account?
-            {' '}
-            <NextLink
-              href="/login"
-              passHref
-            >
-              <Link
-                variant="subtitle2"
-                underline="hover"
-              >
-                Sign In
-              </Link>
-            </NextLink>
+          <Typography color="textSecondary" variant="body2">
+            Have an account?{' '}
+            <LinkUI color="primary" underline="always" variant="subtitle2" component={Link} to="/login">
+              Sign In
+            </LinkUI>
           </Typography>
         </form>
       </Container>
