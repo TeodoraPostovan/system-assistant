@@ -1,7 +1,7 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "plugins": ["@nrwl/nx", "simple-import-sort", "prettier"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -29,5 +29,10 @@
       "extends": ["plugin:@nrwl/nx/javascript"],
       "rules": {}
     }
-  ]
+  ],
+  "rules": {
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "prettier/prettier": "error"
+  }
 }
