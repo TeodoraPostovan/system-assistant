@@ -12,6 +12,7 @@ export const AppState = ({ children }) => {
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [exercises, setExercises] = useState([]);
+  const [surveyData, setSurveyData] = useState({});
 
   const contextValue = useMemo(() => {
     return {
@@ -26,9 +27,11 @@ export const AppState = ({ children }) => {
         setSelectedDate(addDays(selectedDate, 1));
       },
       exercises,
-      setExercises
+      setExercises,
+      surveyData,
+      setSurveyData
     };
-  }, [meals, selectedDate, exercises]);
+  }, [meals, selectedDate, exercises, surveyData]);
 
   return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
 };

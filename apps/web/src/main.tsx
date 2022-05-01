@@ -10,6 +10,7 @@ import Diary from './app/containers/Diary';
 import Layout from './app/containers/Layout';
 import Login from './app/containers/Login';
 import Register from './app/containers/Register';
+import Survey from './app/containers/Survey';
 import { AppState } from './app/state/state';
 import { theme } from './theme';
 
@@ -32,6 +33,7 @@ root.render(
             </Route>
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/survey" element={<Survey />} />
           </Routes>
         </BrowserRouter>
       </AppState>
