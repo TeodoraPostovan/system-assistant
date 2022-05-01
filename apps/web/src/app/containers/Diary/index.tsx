@@ -1,77 +1,57 @@
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Box, Card, CardContent, Container, Grid, IconButton, Typography } from '@mui/material';
 
-const Diary = (props) => (
-  <Card sx={{ height: '100%', width: '100%' }} {...props}>
-    <CardContent>
-      {/* <Grid container spacing={3} sx={{ justifyContent: 'space-between' }}>
-        <Grid item>
-          <Typography color="textSecondary" gutterBottom variant="overline">
-            BUDGET
-          </Typography>
-          <Typography color="textPrimary" variant="h4">
-            $24k
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Avatar
-            sx={{
-              backgroundColor: 'error.main',
-              height: 56,
-              width: 56
-            }}
-          >
-            <MoneyIcon />
-          </Avatar>
-        </Grid>
-      </Grid> */}
+import CurrentDatePicker from '../../components/CurrentDatePicker';
+import Exercises from './exercises';
+import Meals from './meals';
 
-      <Grid container spacing={0} sx={{ flex: 1, width: '100%' }}>
-        <IconButton aria-label="delete">
-          <ChevronLeftIcon />
-        </IconButton>
-        {/* <Grid item lg={3} sm={3} xl={3} xs={3}>
-        </Grid> */}
-        content
-        {/* <Grid item lg={12} sm={12} xl={12} xs={12}>
-        </Grid> */}
-        {/* <Grid item lg={3} sm={3} xl={3} xs={3}>
-        </Grid> */}
-        <IconButton aria-label="delete">
-          <ChevronRightIcon />
-        </IconButton>
-      </Grid>
+const MealsDiary = (props) => {
+  return (
+    <Card sx={{ width: '100%' }} {...props}>
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          Meals log
+        </Typography>
 
-      <Box
-        sx={{
-          pt: 2,
-          display: 'flex',
-          alignItems: 'center'
-        }}
-      >
-        <ArrowDownwardIcon color="error" />
-        <Typography
-          color="error"
+        <Box
           sx={{
-            mr: 1
+            pt: 2,
+            display: 'flex',
+            alignItems: 'center'
           }}
-          variant="body2"
         >
-          12%
+          <Meals />
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
+
+const ExerciseDiary = (props) => {
+  return (
+    <Card sx={{ width: '100%' }} {...props}>
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          Exercise log
         </Typography>
-        <Typography color="textSecondary" variant="caption">
-          Since last month
-        </Typography>
-      </Box>
-    </CardContent>
-  </Card>
-);
+
+        <Box
+          sx={{
+            pt: 2,
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <Exercises />
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
 
 export default (props) => (
   <LayoutWrapper>
-    <Diary {...props}></Diary>
+    <MealsDiary {...props}></MealsDiary>
+    <ExerciseDiary {...props}></ExerciseDiary>
   </LayoutWrapper>
 );
 
@@ -86,8 +66,9 @@ const LayoutWrapper = (props) => (
     <Container maxWidth={false}>
       <Grid container spacing={0}>
         <Grid item lg={12} sm={12} xl={12} xs={12}>
-          {props.children}
+          <CurrentDatePicker />
         </Grid>
+        {props.children}
       </Grid>
     </Container>
   </Box>
