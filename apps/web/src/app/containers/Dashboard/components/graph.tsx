@@ -1,37 +1,57 @@
+/* eslint-disable simple-import-sort/imports */
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { Box, Button, Card, CardContent, CardHeader, Divider, useTheme } from '@mui/material';
-import { BarElement, CategoryScale, Chart, LinearScale } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-Chart.register(BarElement, CategoryScale, LinearScale);
+import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import fil from 'date-fns/esm/locale/fil/index.js';
+import { Line } from 'react-chartjs-2';
 
-export const Sales = (props) => {
+Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+
+// export const Sales = (props) => {
+//   const theme = useTheme();
+
+//   const data = {
+//     labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+//     datasets: [
+//       {
+//         data: [18, 5, 19, 27, 29, 19, 20],
+//         label: 'This week',
+//         borderColor: '#3F51B5',
+//         fill: true,
+//         lineTension: 0.5
+//       }
+//       ]
+//   };
+
+export const Graph = (props) => {
   const theme = useTheme();
 
   const data = {
     datasets: [
       {
         backgroundColor: '#3F51B5',
-        barPercentage: 0.5,
-        barThickness: 12,
+        borderColor: '#3F51B5',
+        // barPercentage: 0.5,
+        lineTension: 0.5,
         borderRadius: 4,
-        categoryPercentage: 0.5,
+        // categoryPercentage: 0.5,
         data: [18, 5, 19, 27, 29, 19, 20],
-        label: 'This year',
-        maxBarThickness: 10
+        label: 'This week'
+        // maxBarThickness: 10
       },
       {
         backgroundColor: '#EEEEEE',
         barPercentage: 0.5,
-        barThickness: 12,
+        lineTension: 0.5,
         borderRadius: 4,
         categoryPercentage: 0.5,
         data: [11, 20, 12, 29, 30, 25, 13],
-        label: 'Last year',
+        label: 'Last week',
         maxBarThickness: 10
       }
     ],
-    labels: ['1 Aug', '2 Aug', '3 Aug', '4 Aug', '5 Aug', '6 Aug', '7 aug']
+    labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   };
 
   const options = {
@@ -87,10 +107,11 @@ export const Sales = (props) => {
       <CardHeader
         action={
           <Button endIcon={<ArrowDropDownIcon fontSize="small" />} size="small">
-            Last 7 days
+            This week
           </Button>
         }
-        title="Latest Sales"
+        titleTypographyProps={{ variant: 'h5' }}
+        title="Progress Overview"
       />
       <Divider />
       <CardContent>
@@ -100,7 +121,7 @@ export const Sales = (props) => {
             position: 'relative'
           }}
         >
-          <Bar data={data} options={options} />
+          <Line data={data} options={options} />
         </Box>
       </CardContent>
       <Divider />
@@ -110,11 +131,7 @@ export const Sales = (props) => {
           justifyContent: 'flex-end',
           p: 2
         }}
-      >
-        <Button color="primary" endIcon={<ArrowRightIcon fontSize="small" />} size="small">
-          Overview
-        </Button>
-      </Box>
+      ></Box>
     </Card>
   );
 };

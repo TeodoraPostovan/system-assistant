@@ -1,47 +1,43 @@
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import MoneyIcon from '@mui/icons-material/Money';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import LocalDrinkIcon from '@mui/icons-material/LocalDrink';
 import { Avatar, Box, Card, CardContent, Grid, Typography } from '@mui/material';
 
-export const Budget = (props) => (
+export const WaterTracker = (props) => (
   <Card sx={{ height: '100%' }} {...props}>
     <CardContent>
       <Grid container spacing={3} sx={{ justifyContent: 'space-between' }}>
         <Grid item>
-          <Typography color="textSecondary" gutterBottom variant="overline">
-            BUDGET
-          </Typography>
           <Typography color="textPrimary" variant="h4">
-            $24k
+            Water Tracker
           </Typography>
         </Grid>
         <Grid item>
           <Avatar
             sx={{
-              backgroundColor: 'error.main',
+              backgroundColor: 'success.main',
               height: 56,
               width: 56
             }}
           >
-            <MoneyIcon />
+            <LocalDrinkIcon />
           </Avatar>
         </Grid>
       </Grid>
       <Box
         sx={{
-          pt: 2,
+          alignItems: 'center',
           display: 'flex',
-          alignItems: 'center'
+          pt: 2
         }}
       >
-        <ArrowDownwardIcon color="error" />
+        <ArrowUpwardIcon color="success" />
         <Typography
-          color="error"
+          variant="body2"
           sx={{
             mr: 1
           }}
-          variant="body2"
         >
-          12%
+          16%
         </Typography>
         <Typography color="textSecondary" variant="caption">
           Since last month
