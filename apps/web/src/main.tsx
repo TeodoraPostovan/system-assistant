@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import Account from './app/containers/Account';
+import Chat from './app/containers/Chat';
 import Coaches from './app/containers/Coaches';
 import Dashboard from './app/containers/Dashboard';
 import Diary from './app/containers/Diary';
@@ -29,6 +30,7 @@ root.render(
               <Route path="account" element={<Account />} />
               <Route path="coaches" element={<Coaches />} />
               <Route path="mydiary" element={<Diary />} />
+              <Route path="chat" element={<Chat />} />
               <Route path="/" element={<Navigate to="/dashboard" />} />
             </Route>
             <Route path="/register" element={<Register />} />

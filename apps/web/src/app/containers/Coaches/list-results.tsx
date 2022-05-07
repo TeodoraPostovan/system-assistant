@@ -1,14 +1,17 @@
+import ChatIcon from '@mui/icons-material/Chat';
 import {
   Avatar,
   Box,
   Card,
   Checkbox,
+  IconButton,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
+  Tooltip,
   Typography
 } from '@mui/material';
 import { format } from 'date-fns';
@@ -66,7 +69,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
   return (
     <Card {...rest}>
       <PerfectScrollbar>
-        <Box sx={{ minWidth: 1050 }}>
+        <Box>
           <Table>
             <TableHead>
               <TableRow>
@@ -82,7 +85,8 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                 <TableCell>Email</TableCell>
                 <TableCell>Location</TableCell>
                 <TableCell>Phone</TableCell>
-                <TableCell>Registration date</TableCell>
+                <TableCell>Actions</TableCell>
+                {/* <TableCell>Registration date</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -115,7 +119,14 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                     {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
                   </TableCell>
                   <TableCell>{customer.phone}</TableCell>
-                  <TableCell>{format(customer.createdAt, 'dd/MM/yyyy')}</TableCell>
+                  <TableCell>
+                    <Tooltip title="Start a conversation">
+                      <IconButton aria-label="start chat">
+                        <ChatIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
+                  {/* <TableCell>{format(customer.createdAt, 'dd/MM/yyyy')}</TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
