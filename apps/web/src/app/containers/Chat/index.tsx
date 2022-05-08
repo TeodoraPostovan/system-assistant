@@ -20,81 +20,66 @@ import {
   VoiceCallButton
 } from '@chatscope/chat-ui-kit-react';
 import { formatRelative } from 'date-fns';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+import { AppContext } from '../../state/state';
+import { sleep } from '../../utils/utils';
 import SocketManager from './chat.service';
 
 export default function () {
-  const [chatState, setChatState] = useState(
-    [] as {
-      username: string;
-      messages: {
-        from: string;
-        to: string;
-        content: string;
-        _id: string;
-      }[];
-      connected: boolean;
-      sessionID: string;
-    }[]
-  );
+  const [socketReady, setSocketReady] = useState(false);
+  const [userList, setUserList] = useState([]);
+  const [history, setHistory] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const { userInfo } = useContext(AppContext);
+
   const selectedChat = searchParams.get('chatId');
 
-  const currentChatWithUser = chatState.find((u) => u.sessionID === selectedChat);
-  const currentHistory = currentChatWithUser?.messages || [];
+  const currentChatWithUser = userList.find((u) => u._id === selectedChat);
+  const name = currentChatWithUser && currentChatWithUser.firstName + ' ' + currentChatWithUser.lastName;
+
+  useEffect(() => {
+    const { _id, email, role } = userInfo;
+    if (_id && email) {
+      SocketManager.client.auth = {
+        sessionID: _id,
+        username: email,
+        role
+      };
+
+      SocketManager.client.on('users', setUserList);
+      SocketManager.client.on('get history response', setHistory);
+      SocketManager.client.on('user connected', (id: string) => {
+        setUserList((prev) => prev.map((u) => (u._id === id ? { ...u, isOnline: true } : u)));
+      });
+      SocketManager.client.on('user disconnected', (id: string) => {
+        setUserList((prev) => prev.map((u) => (u._id === id ? { ...u, isOnline: false } : u)));
+      });
+
+      SocketManager.client.on('private message', (ev) => {
+        setHistory((prevHistory) => [...prevHistory, ev]);
+      });
+
+      SocketManager.connect()
+        .then(() => sleep(200))
+        .then(() => {
+          setSocketReady(true);
+        });
+    }
+
+    return () => {
+      SocketManager.client.removeAllListeners();
+    };
+  }, [userInfo]);
 
   useEffect(() => {
     (async () => {
-      const users: any = await SocketManager.connect();
-      setChatState(users);
+      if (selectedChat && socketReady) {
+        SocketManager.client.emit('get history', selectedChat);
+      }
     })();
-  }, []);
-
-  useEffect(() => {
-    const removeEventListener = SocketManager.onMessage((ev) => {
-      setChatState((prevState) => {
-        return prevState.map((chatHistory) => {
-          if (chatHistory.sessionID === selectedChat) {
-            return {
-              ...chatHistory,
-              messages: [...chatHistory.messages, ev]
-            };
-          }
-
-          return chatHistory;
-        });
-      });
-    });
-
-    return () => {
-      removeEventListener();
-    };
-  }, [selectedChat]);
-
-  useEffect(() => {
-    const removeEventListener = SocketManager.onUserConnected((ev) => {
-      setChatState((prevState) => {
-        // return prevState.map((chatHistory) => {
-        //   if (chatHistory.sessionID === selectedChat) {
-        //     return {
-        //       ...chatHistory,
-        //       messages: [...chatHistory.messages, ev]
-        //     };
-        //   }
-
-        //   return chatHistory;
-        // });
-
-        return [...prevState, ev];
-      });
-    });
-
-    return () => {
-      removeEventListener();
-    };
-  }, [selectedChat]);
+  }, [selectedChat, socketReady]);
 
   const sendMessage = useCallback(
     (value: string) => {
@@ -121,22 +106,26 @@ export default function () {
         <Sidebar position="left" scrollable={false}>
           <Search placeholder="Search..." />
           <ConversationList>
-            {chatState.map((user: any, i) => (
-              <Conversation
-                key={'' + i + user.username}
-                name={user.username}
-                lastSenderName={user.username}
-                info="Yes i can do it for you"
-                onClick={() => openChat(user.sessionID)}
-                active={user.sessionID === selectedChat}
-              >
-                <Avatar
-                  src="https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b"
-                  name={user.username}
-                  status={user.connected ? 'available' : 'unavailable'}
-                />
-              </Conversation>
-            ))}
+            {userList.map((user: any) => {
+              const username = user.firstName + ' ' + user.lastName;
+              const lastMsg = history.find((h) => h.from === user._id)?.content || '';
+              return (
+                <Conversation
+                  key={user._id}
+                  name={username}
+                  // lastSenderName={username}
+                  info={lastMsg}
+                  onClick={() => openChat(user._id)}
+                  active={user._id === selectedChat}
+                >
+                  <Avatar
+                    src="https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b"
+                    name={username}
+                    status={user.isOnline ? 'available' : 'unavailable'}
+                  />
+                </Conversation>
+              );
+            })}
           </ConversationList>
         </Sidebar>
 
@@ -144,17 +133,11 @@ export default function () {
           <ChatContainer>
             <ConversationHeader>
               <ConversationHeader.Back />
-              <Avatar
-                src="https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b"
-                name={currentChatWithUser?.username}
-              />
-              <ConversationHeader.Content
-                userName={currentChatWithUser?.username}
-                info={currentChatWithUser?.connected ? 'online' : 'away'}
-              />
+              <Avatar src="https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b" name={name} />
+              <ConversationHeader.Content userName={name} info={currentChatWithUser?.isOnline ? 'online' : 'away'} />
             </ConversationHeader>
             <MessageList>
-              {currentHistory.map((msg: any) => {
+              {history.map((msg: any) => {
                 const direction = selectedChat === msg.to ? 'outgoing' : 'incoming';
                 const sentTime = formatRelative(msg.ts, Date.now());
                 return (
@@ -162,17 +145,14 @@ export default function () {
                     key={msg.ts + ''}
                     model={{
                       sentTime,
-                      sender: currentChatWithUser.username,
+                      sender: name,
                       direction,
                       position: 'single',
                       payload: msg.content
                     }}
                   >
                     {direction === 'incoming' && (
-                      <Avatar
-                        src="https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b"
-                        name={currentChatWithUser.username}
-                      />
+                      <Avatar src="https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b" name={name} />
                     )}
                     <Message.Footer sender="" sentTime={sentTime} />
                   </Message>

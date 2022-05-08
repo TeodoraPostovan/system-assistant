@@ -35,14 +35,14 @@ export class InMemoryMessageStore implements MessageStore {
 }
 
 export class MongoMessageStore implements MessageStore {
-  private history = new ChatHistoryCollection();
+  // private history = new ChatHistoryCollection();
 
   async saveMessage(message: Message) {
-    await this.history.collection.insertOne(message);
+    return ChatHistoryCollection.collection.insertOne(message) as any;
   }
 
   async findMessagesForUser(userID: string) {
-    return this.history.collection.find({ $or: [{ from: userID }, { to: userID }] }).toArray() as any;
+    return ChatHistoryCollection.collection.find({ $or: [{ from: userID }, { to: userID }] }).toArray() as any;
   }
 
   // async findMessagesForUser(userID: string) {
