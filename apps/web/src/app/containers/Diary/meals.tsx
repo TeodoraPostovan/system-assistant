@@ -6,6 +6,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import { useContext, useState } from 'react';
 
+import { api } from '../../api';
 import { AppContext } from '../../state/state';
 import ItemsList from './items';
 import MealDialog from './meal-dialog';
@@ -24,7 +25,7 @@ export default function () {
     setDialogOpened('');
     console.log(dialogOpened, value);
     if (dialogOpened && value) {
-      setMeals({ ...meals, [dialogOpened.toLowerCase()]: [...meals[dialogOpened.toLowerCase()], value] });
+      setMeals({ ...value, type: dialogOpened.toLowerCase() });
     }
   };
 

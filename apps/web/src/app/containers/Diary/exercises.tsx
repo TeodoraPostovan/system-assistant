@@ -25,13 +25,10 @@ export default function () {
       ev.preventDefault();
       setLoading(true);
       const exercise = await fetchExercises(value);
-      setExercises([
-        ...exercises,
-        {
-          ...exercise,
-          query: value
-        }
-      ]);
+      setExercises({
+        ...exercise,
+        query: value
+      });
       setLoading(false);
     },
     [value, exercises]

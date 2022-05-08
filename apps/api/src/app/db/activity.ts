@@ -1,7 +1,7 @@
 import Mongo from './index';
 
-export class ActivityCollection {
-  private get collection() {
+export class _ActivityCollection {
+  get collection() {
     return Mongo.db.collection('activity');
   }
 
@@ -9,3 +9,5 @@ export class ActivityCollection {
     await this.collection.insertOne(user);
   }
 }
+
+export const ActivityCollection = new _ActivityCollection();

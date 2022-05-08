@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import * as jwt from 'jsonwebtoken';
 
 import { environment } from '../../environments/environment';
+import { UsersCollection } from '../db/user';
 
 export async function isLoggedIn(req: Request, res: Response, next) {
   try {
@@ -13,7 +14,7 @@ export async function isLoggedIn(req: Request, res: Response, next) {
         const payload = await jwt.verify(token, environment.SECRET);
         if (payload) {
           // store user data in request object
-          (req as any).user = payload;
+          (req as any).user = await UsersCollection.collection.findOne({ email: payload.email });
           next();
         } else {
           res.status(400).json({ error: 'token verification failed' });
