@@ -3,6 +3,13 @@ import { createContext, useMemo, useState } from 'react';
 
 export const AppContext = createContext(null);
 
+let savedUserInfo = {};
+try {
+  savedUserInfo = JSON.parse(localStorage.getItem('userInfo'));
+} catch (err) {
+  savedUserInfo = {};
+}
+
 export const AppState = ({ children }) => {
   const [meals, setMeals] = useState({
     breakfast: [],
@@ -13,6 +20,7 @@ export const AppState = ({ children }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [exercises, setExercises] = useState([]);
   const [surveyData, setSurveyData] = useState({});
+  const [userInfo, setUserInfo] = useState(savedUserInfo);
 
   const contextValue = useMemo(() => {
     return {
@@ -29,9 +37,16 @@ export const AppState = ({ children }) => {
       exercises,
       setExercises,
       surveyData,
-      setSurveyData
+      setSurveyData,
+      userInfo,
+      setUserInfo: (val) => {
+        setUserInfo(val);
+        localStorage.setItem('userInfo', JSON.stringify(val));
+      }
     };
-  }, [meals, selectedDate, exercises, surveyData]);
+  }, [meals, selectedDate, exercises, surveyData, userInfo]);
+
+  // console.log(contextValue);
 
   return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
 };

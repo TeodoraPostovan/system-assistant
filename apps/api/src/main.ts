@@ -13,6 +13,8 @@ type Socket = SocketLib & {
   username: string;
 };
 
+import { isLoggedIn } from './app/api/auth.middleware';
+import { UsersCollection } from './app/db/user';
 import { InMemoryMessageStore, MongoMessageStore } from './app/messageStore';
 import { InMemorySessionStore } from './app/sessionStore';
 import { randomId } from './app/utils';
@@ -146,6 +148,7 @@ async function start() {
   });
 
   await Database.init();
+  Promise.all([UsersCollection.init()]);
 
   const port = process.env.port || 3333;
   server

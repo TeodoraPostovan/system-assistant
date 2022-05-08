@@ -1,11 +1,16 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Checkbox, Container, FormHelperText, Link as LinkUI, TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
+import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 
+import { api } from '../../api';
+import { AppContext } from '../../state/state';
+
 const Register = () => {
   const navigate = useNavigate();
+  const { setUserInfo } = useContext(AppContext);
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -21,8 +26,15 @@ const Register = () => {
       password: Yup.string().max(255).required('Password is required'),
       policy: Yup.boolean().oneOf([true], 'This field must be checked')
     }),
-    onSubmit: () => {
-      navigate('/');
+    onSubmit: async (value) => {
+      try {
+        const userData = await api.post('/user/register', value);
+        setUserInfo(userData.data.user);
+        navigate('/');
+      } catch (err) {
+        console.log(err);
+        formik.setFieldError('email', 'Email is already used');
+      }
     }
   });
 
