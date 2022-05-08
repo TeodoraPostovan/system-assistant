@@ -15,6 +15,7 @@ import { Formik } from 'formik';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { api } from '../../api';
 import { AppContext } from '../../state/state';
 import ActivityLevel from './ActivityLevel';
 import General from './General';
@@ -56,15 +57,12 @@ function sleep(t: number) {
 export default function Checkout() {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
-  const { setSurveyData } = React.useContext(AppContext);
+  const { userInfo, setSurveyData } = React.useContext(AppContext);
 
   const handleNext = async (formik) => {
     if (activeStep === steps.length - 1) {
       // submit
-      const values = await formik.submitForm();
-      await sleep(2000);
-      setSurveyData(values);
-      navigate('/');
+      formik.submitForm();
     } else {
       setActiveStep(activeStep + 1);
     }
@@ -72,6 +70,18 @@ export default function Checkout() {
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
+  };
+
+  const onSubmit = async (values) => {
+    const { email } = userInfo;
+
+    await api.post('/user/save-survey', {
+      email,
+      surveyData: values
+    });
+    setSurveyData(values);
+
+    navigate('/');
   };
 
   return (
@@ -96,7 +106,7 @@ export default function Checkout() {
             <Typography variant="subtitle1">We will redirect yoy to the dashboard shortly</Typography>
           </React.Fragment>
         ) : (
-          <Formik initialValues={formInitialValues} onSubmit={console.log}>
+          <Formik initialValues={formInitialValues} onSubmit={onSubmit}>
             {(formik) => {
               return (
                 <>

@@ -46,7 +46,7 @@ export const AppState = ({ children }) => {
     };
   }, [meals, selectedDate, exercises, surveyData, userInfo]);
 
-  // console.log(contextValue);
+  console.log(contextValue);
 
   return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
 };

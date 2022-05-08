@@ -47,4 +47,15 @@ router.post('/login', async (req: Request, res: Response) => {
   }
 });
 
+router.post('/save-survey', async (req: Request, res: Response) => {
+  try {
+    const { email, surveyData } = req.body;
+    await UsersCollection.collection.updateOne({ email }, { $set: { surveyData } });
+    res.json({ success: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+});
+
 export default router;

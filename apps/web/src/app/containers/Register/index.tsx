@@ -1,5 +1,10 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Checkbox, Container, FormHelperText, Link as LinkUI, TextField, Typography } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import { useFormik } from 'formik';
 import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,20 +22,27 @@ const Register = () => {
       firstName: '',
       lastName: '',
       password: '',
-      policy: false
+      policy: false,
+      role: ''
     },
     validationSchema: Yup.object({
       email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
       firstName: Yup.string().max(255).required('First name is required'),
       lastName: Yup.string().max(255).required('Last name is required'),
       password: Yup.string().max(255).required('Password is required'),
-      policy: Yup.boolean().oneOf([true], 'This field must be checked')
+      policy: Yup.boolean().oneOf([true], 'This field must be checked'),
+      role: Yup.string().oneOf(['user', 'coach'], 'This field must be one of the following: user, coach')
     }),
     onSubmit: async (value) => {
       try {
         const userData = await api.post('/user/register', value);
         setUserInfo(userData.data.user);
-        navigate('/');
+
+        if (userData.data.user.surveyData || userData.data.user.role === 'coach') {
+          navigate('/');
+        } else {
+          navigate('/survey');
+        }
       } catch (err) {
         console.log(err);
         formik.setFieldError('email', 'Email is already used');
@@ -87,6 +99,24 @@ const Register = () => {
             value={formik.values.lastName}
             variant="outlined"
           />
+
+          <FormControl>
+            <FormLabel id="user-role">What role you want?</FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="user-role"
+              name="role"
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.role}
+            >
+              <FormControlLabel value="coach" control={<Radio />} label="Coach" />
+              <FormControlLabel value="user" control={<Radio />} label="Client" />
+              {/* <FormControlLabel value="other" control={<Radio />} label="Other" />
+              <FormControlLabel value="disabled" disabled control={<Radio />} label="other" /> */}
+            </RadioGroup>
+          </FormControl>
+
           <TextField
             error={Boolean(formik.touched.email && formik.errors.email)}
             fullWidth
