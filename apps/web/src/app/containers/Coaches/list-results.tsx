@@ -16,15 +16,19 @@ import {
 } from '@mui/material';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
+import { useNavigate } from 'react-router-dom';
 
+import { api } from '../../api';
 import { getInitials } from '../../utils/get-initials';
 
-export const CustomerListResults = ({ customers, ...rest }) => {
+export const CustomerListResults = ({ ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  const [customers, setCustomers] = useState([]);
+  const navigate = useNavigate();
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
@@ -66,6 +70,17 @@ export const CustomerListResults = ({ customers, ...rest }) => {
     setPage(newPage);
   };
 
+  const startConversation = (id: string) => {
+    navigate('/chat?chatId=' + id);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const users = await api.get('/user/get-coaches');
+      setCustomers(users.data.users);
+    })();
+  }, []);
+
   return (
     <Card {...rest}>
       <PerfectScrollbar>
@@ -83,19 +98,19 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                 </TableCell>
                 <TableCell>Name</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>Location</TableCell>
-                <TableCell>Phone</TableCell>
+                {/* <TableCell>Location</TableCell>
+                <TableCell>Phone</TableCell> */}
                 <TableCell>Actions</TableCell>
                 {/* <TableCell>Registration date</TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
               {customers.slice(0, limit).map((customer) => (
-                <TableRow hover key={customer.id} selected={selectedCustomerIds.indexOf(customer.id) !== -1}>
+                <TableRow hover key={customer._id} selected={selectedCustomerIds.indexOf(customer._id) !== -1}>
                   <TableCell padding="checkbox">
                     <Checkbox
-                      checked={selectedCustomerIds.indexOf(customer.id) !== -1}
-                      onChange={(event) => handleSelectOne(event, customer.id)}
+                      checked={selectedCustomerIds.indexOf(customer._id) !== -1}
+                      onChange={(event) => handleSelectOne(event, customer._id)}
                       value="true"
                     />
                   </TableCell>
@@ -107,21 +122,21 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                       }}
                     >
                       <Avatar src={customer.avatarUrl} sx={{ mr: 2 }}>
-                        {getInitials(customer.name)}
+                        {getInitials(customer.firstName + ' ' + customer.lastName)}
                       </Avatar>
                       <Typography color="textPrimary" variant="body1">
-                        {customer.name}
+                        {customer.firstName + ' ' + customer.lastName}
                       </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>{customer.email}</TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
                   </TableCell>
-                  <TableCell>{customer.phone}</TableCell>
+                  <TableCell>{customer.phone}</TableCell> */}
                   <TableCell>
                     <Tooltip title="Start a conversation">
-                      <IconButton aria-label="start chat">
+                      <IconButton aria-label="start chat" onClick={() => startConversation(customer._id)}>
                         <ChatIcon />
                       </IconButton>
                     </Tooltip>

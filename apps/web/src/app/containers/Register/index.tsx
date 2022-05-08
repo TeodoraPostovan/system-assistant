@@ -35,7 +35,7 @@ const Register = () => {
     }),
     onSubmit: async (value) => {
       try {
-        const userData = await api.post('/user/register', value);
+        const userData = await api.post('/auth/register', value);
         setUserInfo(userData.data.user);
 
         if (userData.data.user.surveyData || userData.data.user.role === 'coach') {

@@ -5,6 +5,7 @@ import * as http from 'http';
 import { Server, Socket as SocketLib } from 'socket.io';
 
 import activityApi from './app/api/activity';
+import authApi from './app/api/auth';
 import userApi from './app/api/user';
 import Database from './app/db';
 
@@ -38,7 +39,8 @@ async function start() {
     }
   });
 
-  app.use('/api/user', userApi);
+  app.use('/api/auth', authApi);
+  app.use('/api/user', isLoggedIn, userApi);
   app.use('/api/activity', isLoggedIn, activityApi);
 
   app.get('/api', (req, res) => {

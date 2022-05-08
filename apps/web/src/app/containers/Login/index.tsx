@@ -26,7 +26,7 @@ const Login = () => {
     }),
     onSubmit: async (value) => {
       try {
-        const userData = await api.post('/user/login', value);
+        const userData = await api.post('/auth/login', value);
         setUserInfo(userData.data.user);
         navigate('/');
       } catch (err) {
