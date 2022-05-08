@@ -1,8 +1,10 @@
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { api } from '../../api';
+import { AppContext } from '../../state/state';
 import { DashboardNavbar } from './navbar';
 import { DashboardSidebar } from './sidebar';
 
@@ -19,6 +21,16 @@ const DashboardLayoutRoot = styled('div')(({ theme }) => ({
 const Layout = (props) => {
   // const { children } = props;
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const { setUserInfo } = useContext(AppContext);
+
+  useEffect(() => {
+    (async () => {
+      const userInfo = await api.get('/user/me');
+      if (userInfo?.data?.user) {
+        setUserInfo(userInfo.data.user);
+      }
+    })();
+  }, []);
 
   return (
     <>

@@ -1,6 +1,8 @@
 import { Request, Response, Router } from 'express';
 import * as jwt from 'jsonwebtoken';
 
+import { environment } from '../../environments/environment';
+
 export async function isLoggedIn(req: Request, res: Response, next) {
   try {
     // check if auth header exists
@@ -8,7 +10,7 @@ export async function isLoggedIn(req: Request, res: Response, next) {
       // parse token from header
       const token = req.headers.authorization.split(' ')[1]; //split the header and get the token
       if (token) {
-        const payload = await jwt.verify(token, process.env.SECRET);
+        const payload = await jwt.verify(token, environment.SECRET);
         if (payload) {
           // store user data in request object
           (req as any).user = payload;

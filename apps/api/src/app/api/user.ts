@@ -1,12 +1,13 @@
 import * as crypto from 'crypto';
 import { Request, Response, Router } from 'express';
 import * as jwt from 'jsonwebtoken';
+import { serializeError } from 'serialize-error';
 
+import { environment } from '../../environments/environment';
 import { UsersCollection } from '../db/user';
+import { isLoggedIn } from './auth.middleware';
 
 const router = Router();
-
-const SECRET = 'supersecret';
 
 router.post('/register', async (req: Request, res: Response) => {
   try {
@@ -17,11 +18,11 @@ router.post('/register', async (req: Request, res: Response) => {
     // create a new user
     await UsersCollection.collection.insertOne(req.body);
     const { password, ...rest } = req.body;
-    const token = await jwt.sign(rest, SECRET);
+    const token = await jwt.sign(rest, environment.SECRET);
     // send new user as response
     res.send({ token, user: rest });
   } catch (error) {
-    res.status(500).json({ error });
+    res.status(500).json({ error: serializeError(error) });
   }
 });
 
@@ -34,7 +35,7 @@ router.post('/login', async (req: Request, res: Response) => {
       const hashedPassword = hash.digest('hex');
       if (hashedPassword === user.password) {
         const { password, ...rest } = user;
-        const token = await jwt.sign(rest, SECRET);
+        const token = await jwt.sign(rest, environment.SECRET);
         res.send({ token, user: rest });
       } else {
         res.status(401).send({ error: 'Invalid username or password' });
@@ -43,7 +44,7 @@ router.post('/login', async (req: Request, res: Response) => {
       res.status(400).json({ error: "User doesn't exist" });
     }
   } catch (error) {
-    res.status(500).json({ error });
+    res.status(500).json({ error: serializeError(error) });
   }
 });
 
@@ -54,7 +55,17 @@ router.post('/save-survey', async (req: Request, res: Response) => {
     res.json({ success: true });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error });
+    res.status(500).json({ error: serializeError(error) });
+  }
+});
+
+router.get('/me', isLoggedIn, async (req: Request, res: Response) => {
+  try {
+    const { email } = (req as any).user;
+    const user = await UsersCollection.collection.findOne({ email });
+    res.json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ error: serializeError(error) });
   }
 });
 
