@@ -1,3 +1,4 @@
+import ChatIcon from '@mui/icons-material/Chat';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
@@ -24,9 +25,9 @@ const items = [
     title: 'Dashboard'
   },
   {
-    href: '/coaches',
-    icon: <UsersIcon fontSize="small" />,
-    title: 'Coaches'
+    href: '/account',
+    icon: <UserIcon fontSize="small" />,
+    title: 'Account'
   },
   {
     href: '/mydiary',
@@ -34,19 +35,24 @@ const items = [
     title: 'My diary'
   },
   {
-    href: '/account',
-    icon: <UserIcon fontSize="small" />,
-    title: 'Account'
+    href: '/coaches',
+    icon: <UsersIcon fontSize="small" />,
+    title: 'Coaches'
+  },
+  {
+    href: '/chat',
+    icon: <ChatIcon fontSize="small" />,
+    title: 'Chat'
   },
   {
     href: '/recipe-suggestions',
     icon: <RestaurantIcon fontSize="small" />,
-    title: 'Recipe suggestions'
+    title: 'Recipes'
   },
   {
     href: '/exercise-suggestions',
     icon: <FitnessCenterIcon fontSize="small" />,
-    title: 'Exercise suggestions'
+    title: 'Exercises'
   }
   // {
   //   href: '/settings',
