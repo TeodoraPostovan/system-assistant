@@ -45,12 +45,12 @@ export const AppState = ({ children }) => {
         const { sports } = await fetchActivity(selectedDate);
         setExercises(sports);
       },
-      surveyData,
-      setSurveyData,
+      // surveyData,
+      // setSurveyData,
       userInfo,
       setUserInfo
     };
-  }, [meals, selectedDate, exercises, surveyData, userInfo]);
+  }, [meals, selectedDate, exercises, userInfo]);
 
   useEffect(() => {
     (async () => {

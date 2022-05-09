@@ -1,4 +1,5 @@
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
 import { Box, Button, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -35,6 +36,11 @@ const items = [
     href: '/account',
     icon: <UserIcon fontSize="small" />,
     title: 'Account'
+  },
+  {
+    href: '/recipe-suggestions',
+    icon: <RestaurantIcon fontSize="small" />,
+    title: 'Recipe suggestions'
   }
   // {
   //   href: '/settings',

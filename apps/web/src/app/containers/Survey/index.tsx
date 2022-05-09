@@ -13,6 +13,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Formik } from 'formik';
 import * as React from 'react';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '../../api';
@@ -72,17 +73,21 @@ export default function Checkout() {
     setActiveStep(activeStep - 1);
   };
 
-  const onSubmit = async (values) => {
-    const { email } = userInfo;
+  const onSubmit = useCallback(
+    async (values) => {
+      const { email } = userInfo;
+      console.log(userInfo);
 
-    await api.post('/user/save-survey', {
-      email,
-      surveyData: values
-    });
-    setSurveyData(values);
+      await api.post('/user/save-survey', {
+        email,
+        surveyData: values
+      });
+      // setSurveyData(values);
 
-    navigate('/');
-  };
+      navigate('/');
+    },
+    [userInfo]
+  );
 
   return (
     <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
@@ -139,6 +144,7 @@ const formInitialValues = {
   height: 0,
   goal: '',
   allergies: [],
+  diets: [],
   diagnosis: [],
   activityLevel: ''
 };

@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { serializeError } from 'serialize-error';
 
+import { RecommendationCollection } from '../db/recommendation';
 import { UsersCollection } from '../db/user';
 
 const router = Router();
@@ -8,7 +9,9 @@ const router = Router();
 router.post('/save-survey', async (req: Request, res: Response) => {
   try {
     const { email, surveyData } = req.body;
+    const userInfo = (req as any).user;
     await UsersCollection.collection.updateOne({ email }, { $set: { surveyData } });
+    RecommendationCollection.collection.deleteMany({ userId: userInfo._id });
     res.json({ success: true });
   } catch (error) {
     console.log(error);

@@ -6,6 +6,7 @@ import * as http from 'http';
 import activityApi from './app/api/activity';
 import authApi from './app/api/auth';
 import { isLoggedIn } from './app/api/auth.middleware';
+import recipesApi from './app/api/recipes';
 import userApi from './app/api/user';
 import Database from './app/db';
 import { UsersCollection } from './app/db/user';
@@ -22,6 +23,7 @@ async function start() {
   app.use('/api/auth', authApi);
   app.use('/api/user', isLoggedIn, userApi);
   app.use('/api/activity', isLoggedIn, activityApi);
+  app.use('/api/recipe', isLoggedIn, recipesApi);
 
   app.get('/api', (req, res) => {
     res.send({ message: 'Welcome to api!' });

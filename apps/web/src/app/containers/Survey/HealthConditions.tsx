@@ -29,8 +29,31 @@ export default function ({ formik }) {
             renderValue={(selected) => selected.join(', ')}
             // MenuProps={MenuProps}
           >
-            {restrictions.map((name) => (
-              <MenuItem key={name} value={name}>
+            {intolerances.map(([name, value]) => (
+              <MenuItem key={name} value={value}>
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+
+      <Grid item xs={12} sm={12}>
+        <FormControl fullWidth error={Boolean(formik.touched.diets && formik.errors.diets)}>
+          <InputLabel id="diets-label">Do you have any diet preferences?</InputLabel>
+          <Select
+            labelId="diets-label"
+            id="diets"
+            multiple
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.diets}
+            input={<OutlinedInput name="diets" label="Do you have any diet preferences?" />}
+            renderValue={(selected) => selected.join(', ')}
+            // MenuProps={MenuProps}
+          >
+            {diets.map(([name, value]) => (
+              <MenuItem key={name} value={value}>
                 {name}
               </MenuItem>
             ))}
@@ -75,16 +98,29 @@ const MenuProps = {
   }
 };
 
-const restrictions = [
-  'Veganism',
-  'Vegetarianism',
-  'Pescetarianism',
-  'Gluten-free',
-  'Dairy-free',
-  'Egg-free',
-  'Peanut-free',
-  'Other',
-  'None'
+const intolerances = [
+  ['Sea food', 'seafood'],
+  ['Gluten', 'gluten'],
+  ['Dairy', 'dairy'],
+  ['Egg', 'egg'],
+  ['Grain', 'grain'],
+  ['Peanut', 'peanut'],
+  ['Shellfish', 'shellfish'],
+  ['Sesame', 'sesame'],
+  ['Soy', 'soy'],
+  ['Sulfite', 'sulfite'],
+  ['Tree nut', 'tree nut'],
+  ['Wheat', 'wheat']
+];
+
+const diets = [
+  ['Pescetarian', 'pescetarian'],
+  ['Lacto vegetarian', 'lacto vegetarian'],
+  ['Ovo vegetarian', 'ovo vegetarian'],
+  ['Vegan', 'vegan'],
+  ['Paleo', 'paleo'],
+  ['Primal', 'primal'],
+  ['Vegetarian', 'vegetarian']
 ];
 
 const diagnosis = [
