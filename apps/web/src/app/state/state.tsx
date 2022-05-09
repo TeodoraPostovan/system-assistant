@@ -13,6 +13,7 @@ export const AppState = ({ children }) => {
     snacks: []
   });
   const [dailyMetrics, setDailyMetrics] = useState(null);
+  const [weeklyMetrics, setWeeklyMetrics] = useState(null);
   const [exercises, setExercises] = useState([]);
   const [waterLog, setWaterLog] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -20,9 +21,7 @@ export const AppState = ({ children }) => {
 
   const fetchActivity = useCallback(async () => {
     const {
-      data: {
-        results: { meal, sport, water }
-      }
+      data: { meal, sport, water, dailyMetrics, weeklyMetrics }
     } = await api.get('/activity/get', { params: { ts: +new Date(selectedDate) } });
 
     const meals = meal.reduce(
@@ -44,16 +43,23 @@ export const AppState = ({ children }) => {
       return sum + w.data.quantity;
     }, 0);
 
-    return {
+    const result = {
       meals,
       sports,
       water: {
         quantity: waterQuantityMl,
         cups: water.length
       },
-      dailyMetrics: calculateDailyMetrics(meal, sports, userInfo?.surveyData || {})
+      dailyMetrics,
+      weeklyMetrics
     };
-  }, [userInfo, selectedDate]);
+
+    setMeals(result.meals);
+    setExercises(result.sports);
+    setWaterLog(result.water);
+    setDailyMetrics(result.dailyMetrics);
+    setWeeklyMetrics(result.weeklyMetrics);
+  }, [selectedDate, setMeals, setExercises, setWaterLog, setDailyMetrics, setWeeklyMetrics]);
 
   const saveActivity = useCallback(
     async (payload: any) => {
@@ -73,8 +79,7 @@ export const AppState = ({ children }) => {
           ...payload,
           category: 'meal'
         });
-        const { meals } = await fetchActivity();
-        setMeals(meals);
+        fetchActivity();
       },
       selectedDate,
       setPrevDay: () => setSelectedDate(subDays(selectedDate, 1)),
@@ -90,105 +95,28 @@ export const AppState = ({ children }) => {
           ...payload,
           category: 'sport'
         });
-        const { sports } = await fetchActivity();
-        setExercises(sports);
+        fetchActivity();
       },
       saveWaterLog: async (quantity: number) => {
         await saveActivity({
           quantity,
           category: 'water'
         });
-        const { water } = await fetchActivity();
-        setWaterLog(water);
+        fetchActivity();
       },
       userInfo,
       setUserInfo,
       dailyMetrics,
+      weeklyMetrics,
       waterLog
     };
-  }, [meals, selectedDate, exercises, userInfo, dailyMetrics, waterLog, fetchActivity, saveActivity]);
+  }, [meals, selectedDate, exercises, userInfo, dailyMetrics, waterLog, weeklyMetrics, fetchActivity, saveActivity]);
 
   useEffect(() => {
-    (async () => {
-      const { meals, sports, water, dailyMetrics } = await fetchActivity();
-      setMeals(meals);
-      setExercises(sports);
-      setWaterLog(water);
-      setDailyMetrics(dailyMetrics);
-    })();
-  }, [selectedDate, userInfo]);
+    fetchActivity();
+  }, [selectedDate]);
 
   console.log(contextValue);
 
   return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
 };
-
-function calculateDailyMetrics(meals: any, sports: any, surveyData: any) {
-  const metrics = {
-    protein: 0,
-    carbs: 0,
-    fat: 0,
-    exerciseDuration: 0,
-    calories: 0,
-    dailySuggestedCalories: 0,
-    BMR: 0,
-    dailySuggestedProtein: 0,
-    dailySuggestedCarbs: 0,
-    dailySuggestedFat: 0
-  };
-
-  // console.log(surveyData);
-
-  let BMR = 0;
-  if (surveyData.gender === 'male') {
-    BMR = 10 * surveyData.weight + 6.25 * surveyData.height - 5 * surveyData.age + 5;
-  } else {
-    BMR = 10 * surveyData.weight + 6.25 * surveyData.height - 5 * surveyData.age - 161;
-  }
-
-  let dailySuggestedCalories = 0;
-  if (surveyData.activityLevel === 'sedentary') {
-    dailySuggestedCalories = BMR * 1.2;
-  } else if (surveyData.activityLevel === 'active') {
-    dailySuggestedCalories = BMR * 1.375;
-  } else if (surveyData.activityLevel === 'extremely_active') {
-    dailySuggestedCalories = BMR * 1.55;
-  }
-
-  metrics.BMR = BMR;
-  metrics.dailySuggestedCalories = dailySuggestedCalories;
-  if (surveyData.goal === 'lose') {
-    metrics.dailySuggestedCalories -= 500;
-    metrics.dailySuggestedCarbs = Math.floor((dailySuggestedCalories * 0.4) / 4);
-    metrics.dailySuggestedProtein = Math.floor((dailySuggestedCalories * 0.3) / 4);
-    metrics.dailySuggestedFat = Math.floor((dailySuggestedCalories * 0.3) / 9);
-  } else if (surveyData.goal === 'gain') {
-    metrics.dailySuggestedCalories += 500;
-    metrics.dailySuggestedCarbs = Math.floor((dailySuggestedCalories * 0.45) / 4);
-    metrics.dailySuggestedProtein = Math.floor((dailySuggestedCalories * 0.35) / 4);
-    metrics.dailySuggestedFat = Math.floor((dailySuggestedCalories * 0.2) / 9);
-  } else {
-    metrics.dailySuggestedCarbs = Math.floor((dailySuggestedCalories * 0.5) / 4);
-    metrics.dailySuggestedProtein = Math.floor((dailySuggestedCalories * 0.25) / 4);
-    metrics.dailySuggestedFat = Math.floor((dailySuggestedCalories * 0.25) / 9);
-  }
-
-  meals.forEach(({ data }) => {
-    metrics.protein += data.nf_protein;
-    metrics.carbs += data.nf_total_carbohydrate;
-    metrics.fat += data.nf_total_fat;
-    metrics.calories += data.nf_calories;
-  });
-
-  sports.forEach((sport) => {
-    if (typeof sport.duration_min === 'number') {
-      metrics.exerciseDuration += sport.duration_min;
-    }
-    if (typeof sport.nf_calories === 'number') {
-      metrics.calories += sport.nf_calories;
-    }
-  });
-
-  // console.log(metrics);
-  return metrics;
-}
