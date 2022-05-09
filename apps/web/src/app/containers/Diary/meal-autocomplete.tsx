@@ -95,6 +95,7 @@ export default function (props) {
         <TextField
           {...params}
           label="Search meals"
+          variant="filled"
           InputProps={{
             ...params.InputProps,
             endAdornment: (
