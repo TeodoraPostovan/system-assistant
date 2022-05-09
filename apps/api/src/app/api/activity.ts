@@ -10,7 +10,7 @@ const router = Router();
 router.post('/save-activity', async (req: Request, res: Response) => {
   try {
     const payload = {
-      ts: new Date(),
+      ts: new Date(req.body.ts),
       data: req.body,
       userId: (req as any).user._id,
       type: req.body.category
@@ -44,7 +44,8 @@ router.get('/get', async (req: Request, res: Response) => {
       },
       {
         meal: [],
-        sport: []
+        sport: [],
+        water: []
       }
     );
 

@@ -6,16 +6,20 @@ import LocalFireDepartmentTwoToneIcon from '@mui/icons-material/LocalFireDepartm
 import { Avatar, Box, Card, CardContent, Divider, Grid, LinearProgress, Typography, useTheme } from '@mui/material';
 import { ArcElement, Chart } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import { useContext } from 'react';
+import { AppContext } from '../../../state/state';
 
 Chart.register(ArcElement);
 
 export const CalorieTracker = (props) => {
   const theme = useTheme();
 
+  const { userInfo, dailyMetrics } = useContext(AppContext);
+
   const data = {
     datasets: [
       {
-        data: [50, 20, 30],
+        data: [dailyMetrics?.carbs, dailyMetrics?.protein, dailyMetrics?.fat],
         backgroundColor: ['#3F51B5', '#e53935', '#FB8C00'],
         borderWidth: 8,
         borderColor: '#FFFFFF',
@@ -49,24 +53,33 @@ export const CalorieTracker = (props) => {
 
   const nutritients = [
     {
-      title: '106.5/213g',
-      value: 50,
+      key: 'carbs',
+      title: `${dailyMetrics?.carbs}/${dailyMetrics?.dailySuggestedCarbs}g`,
+      value: Math.round((100 * dailyMetrics?.carbs) / dailyMetrics?.dailySuggestedCarbs),
       icon: BreakfastDiningOutlinedIcon,
       color: '#3F51B5'
     },
     {
-      title: '18/85g',
-      value: 20,
+      key: 'protein',
+      title: `${dailyMetrics?.protein}/${dailyMetrics?.dailySuggestedProtein}g`,
+      value: Math.round((100 * dailyMetrics?.protein) / dailyMetrics?.dailySuggestedProtein),
       icon: EggAltOutlinedIcon,
       color: '#E53935'
     },
     {
-      title: '17.1/57g',
-      value: 30,
+      key: 'fat',
+      title: `${dailyMetrics?.fat}/${dailyMetrics?.dailySuggestedFat}g`,
+      value: Math.round((100 * dailyMetrics?.fat) / dailyMetrics?.dailySuggestedFat),
       icon: OpacityOutlinedIcon,
       color: '#FB8C00'
     }
   ];
+
+  if (!dailyMetrics) {
+    return null;
+  }
+
+  const dailyCaloriesPercent = Math.round((dailyMetrics.calories * 100) / dailyMetrics.dailySuggestedCalories);
 
   return (
     <Card sx={{ height: '100%' }} {...props}>
@@ -91,11 +104,11 @@ export const CalorieTracker = (props) => {
         </Grid>
         <Box sx={{ pt: 3 }}>
           <Typography color="textPrimary" variant="h5">
-            651.9 kcal/1705 kcal
+            {dailyMetrics.calories} kcal/{dailyMetrics.dailySuggestedCalories} kcal
           </Typography>
-          <LinearProgress value={38} variant="determinate" />
+          <LinearProgress value={dailyCaloriesPercent} variant="determinate" />
           <Typography color="textSecondary" variant="body2">
-            38% of daily recommended calories consumed
+            {dailyCaloriesPercent}% of daily recommended calories consumed
           </Typography>
         </Box>
         <Box sx={{ m: 2 }}>
@@ -111,9 +124,9 @@ export const CalorieTracker = (props) => {
             pt: 2
           }}
         >
-          {nutritients.map(({ color, icon: Icon, title, value }) => (
+          {nutritients.map(({ color, icon: Icon, title, value, key }) => (
             <Box
-              key={title}
+              key={key}
               sx={{
                 p: 1,
                 textAlign: 'center'

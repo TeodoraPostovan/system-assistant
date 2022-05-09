@@ -87,18 +87,18 @@ root.render(
                     </ProtectedRoute>
                   }
                 />
-                <Route
-                  path="/survey"
-                  element={
-                    <ProtectedRoute>
-                      <Survey />
-                    </ProtectedRoute>
-                  }
-                />
                 <Route path="/" element={<Navigate to="/dashboard" />} />
               </Route>
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
+              <Route
+                path="/survey"
+                element={
+                  <ProtectedRoute>
+                    <Survey />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </App>
         </BrowserRouter>
