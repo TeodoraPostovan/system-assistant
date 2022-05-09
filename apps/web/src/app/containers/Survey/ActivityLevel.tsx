@@ -30,6 +30,24 @@ export default function ({ formik }) {
           </Select>
         </FormControl>
       </Grid>
+      <Grid item xs={12} sm={12}>
+        <FormControl fullWidth error={Boolean(formik.touched.experience && formik.errors.experience)}>
+          <InputLabel id="experience-label">How experienced in training are you?</InputLabel>
+          <Select
+            labelId="experience-label"
+            id="experience"
+            name="experience"
+            label="How experienced in training are you?"
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.experience}
+          >
+            <MenuItem value="beginner">Beginner</MenuItem>
+            <MenuItem value="intermediate">Intermediate</MenuItem>
+            <MenuItem value="expert">Expert</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
     </Grid>
   );
 }

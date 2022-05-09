@@ -146,5 +146,6 @@ const formInitialValues = {
   allergies: [],
   diets: [],
   diagnosis: [],
-  activityLevel: ''
+  activityLevel: '',
+  experience: ''
 };

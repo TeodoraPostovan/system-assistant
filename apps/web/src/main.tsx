@@ -9,10 +9,11 @@ import Chat from './app/containers/Chat';
 import Coaches from './app/containers/Coaches';
 import Dashboard from './app/containers/Dashboard';
 import Diary from './app/containers/Diary';
+import ExerciseSuggestions from './app/containers/Exercise-Suggestions';
 import Layout from './app/containers/Layout';
 import Login from './app/containers/Login';
+import RecipeSuggestions from './app/containers/Recipe-Suggestions';
 import Register from './app/containers/Register';
-import Suggestions from './app/containers/Suggestions';
 import Survey from './app/containers/Survey';
 import { AppState } from './app/state/state';
 import { theme } from './theme';
@@ -34,7 +35,8 @@ root.render(
                 <Route path="coaches" element={<Coaches />} />
                 <Route path="mydiary" element={<Diary />} />
                 <Route path="chat" element={<Chat />} />
-                <Route path="recipe-suggestions" element={<Suggestions />} />
+                <Route path="recipe-suggestions" element={<RecipeSuggestions />} />
+                <Route path="exercise-suggestions" element={<ExerciseSuggestions />} />
                 <Route path="/" element={<Navigate to="/dashboard" />} />
               </Route>
               <Route path="/register" element={<Register />} />

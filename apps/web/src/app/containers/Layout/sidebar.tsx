@@ -1,3 +1,4 @@
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import { Box, Button, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
@@ -41,6 +42,11 @@ const items = [
     href: '/recipe-suggestions',
     icon: <RestaurantIcon fontSize="small" />,
     title: 'Recipe suggestions'
+  },
+  {
+    href: '/exercise-suggestions',
+    icon: <FitnessCenterIcon fontSize="small" />,
+    title: 'Exercise suggestions'
   }
   // {
   //   href: '/settings',

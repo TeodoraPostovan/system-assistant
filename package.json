@@ -53,6 +53,7 @@
     "react-is": "18.0.0",
     "react-perfect-scrollbar": "^1.5.8",
     "react-router-dom": "6.3.0",
+    "react-swipeable-views": "^0.14.0",
     "serialize-error": "^8.1.0",
     "socket.io": "^4.5.0",
     "socket.io-client": "^4.5.0",
