@@ -61,49 +61,25 @@ export default function ({ meal, onChange }) {
 }
 
 const nutrients = {
-  nf_calcium_mg: {
-    unit: 'mg',
-    name: 'Calcium, Ca'
-  },
   nf_total_carbohydrate: {
     unit: 'g',
     name: 'Carbohydrate, by difference'
   },
-  nf_cholesterol: {
-    unit: 'mg',
-    name: 'Cholesterol'
-  },
-  nf_calories: {
-    unit: 'kcal',
-    name: 'Energy'
-  },
-  nf_saturated_fat: {
+  nf_protein: {
     unit: 'g',
-    name: 'Fatty acids, total saturated'
+    name: 'Protein'
   },
   nf_total_fat: {
     unit: 'g',
     name: 'Total lipid (fat)'
   },
+  nf_saturated_fat: {
+    unit: 'g',
+    name: 'Fatty acids, total saturated'
+  },
   nf_trans_fatty_acid: {
     unit: 'g',
     name: 'Fatty acids, total trans'
-  },
-  nf_dietary_fiber: {
-    unit: 'g',
-    name: 'Fiber, total dietary'
-  },
-  nf_potassium: {
-    unit: 'mg',
-    name: 'Potassium, K'
-  },
-  nf_sodium: {
-    unit: 'mg',
-    name: 'Sodium, Na'
-  },
-  nf_protein: {
-    unit: 'g',
-    name: 'Protein'
   },
   nf_sugars: {
     unit: 'g',
@@ -113,9 +89,33 @@ const nutrients = {
     unit: 'g',
     name: 'Sugars, added'
   },
+  nf_dietary_fiber: {
+    unit: 'g',
+    name: 'Fiber, total dietary'
+  },
+  nf_cholesterol: {
+    unit: 'mg',
+    name: 'Cholesterol'
+  },
+  nf_potassium: {
+    unit: 'mg',
+    name: 'Potassium, K'
+  },
+  nf_sodium: {
+    unit: 'mg',
+    name: 'Sodium, Na'
+  },
+  nf_calcium_mg: {
+    unit: 'mg',
+    name: 'Calcium, Ca'
+  },
   nf_vitamin_d_mcg: {
     unit: 'IU',
     name: 'Vitamin D'
+  },
+  nf_calories: {
+    unit: 'kcal',
+    name: 'Energy'
   }
 };
 
@@ -125,6 +125,13 @@ function Description(props) {
       .filter((key) => !!props[key])
       .map((key) => {
         const text = `${nutrients[key].name}: ${props[key]} ${nutrients[key].unit}`;
+        if (nutrients[key].name === 'Energy') {
+          return (
+            <ListItem key={text}>
+              <Chip key={key} label={text} variant="filled" />
+            </ListItem>
+          );
+        }
         return (
           <ListItem key={text}>
             <Chip key={text} label={text} variant="outlined" />
@@ -135,7 +142,7 @@ function Description(props) {
 
   return (
     <Card>
-      <CardMedia component="img" height="200" image={props.photo.highres} />
+      <CardMedia component="img" height="auto" image={props.photo.highres} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {props.food_name}
