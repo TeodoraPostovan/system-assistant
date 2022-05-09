@@ -16,6 +16,7 @@ import RecipeSuggestions from './app/containers/Recipe-Suggestions';
 import Register from './app/containers/Register';
 import Survey from './app/containers/Survey';
 import { AppState } from './app/state/state';
+import ProtectedRoute from './app/utils/ProtectedRoute';
 import { theme } from './theme';
 
 const container = document.getElementById('root');
@@ -30,18 +31,74 @@ root.render(
           <App>
             <Routes>
               <Route path="/" element={<Layout />}>
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="account" element={<Account />} />
-                <Route path="coaches" element={<Coaches />} />
-                <Route path="mydiary" element={<Diary />} />
-                <Route path="chat" element={<Chat />} />
-                <Route path="recipe-suggestions" element={<RecipeSuggestions />} />
-                <Route path="exercise-suggestions" element={<ExerciseSuggestions />} />
+                <Route
+                  path="dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account"
+                  element={
+                    <ProtectedRoute>
+                      <Account />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="coaches"
+                  element={
+                    <ProtectedRoute>
+                      <Coaches />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="mydiary"
+                  element={
+                    <ProtectedRoute>
+                      <Diary />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="chat"
+                  element={
+                    <ProtectedRoute>
+                      <Chat />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="recipe-suggestions"
+                  element={
+                    <ProtectedRoute>
+                      <RecipeSuggestions />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="exercise-suggestions"
+                  element={
+                    <ProtectedRoute>
+                      <ExerciseSuggestions />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/survey"
+                  element={
+                    <ProtectedRoute>
+                      <Survey />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="/" element={<Navigate to="/dashboard" />} />
               </Route>
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/survey" element={<Survey />} />
             </Routes>
           </App>
         </BrowserRouter>

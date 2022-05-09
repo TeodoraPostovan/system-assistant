@@ -14,8 +14,7 @@ export const AppState = ({ children }) => {
   });
   const [exercises, setExercises] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [surveyData, setSurveyData] = useState({});
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState(null);
 
   const contextValue = useMemo(() => {
     return {
@@ -45,8 +44,6 @@ export const AppState = ({ children }) => {
         const { sports } = await fetchActivity(selectedDate);
         setExercises(sports);
       },
-      // surveyData,
-      // setSurveyData,
       userInfo,
       setUserInfo
     };

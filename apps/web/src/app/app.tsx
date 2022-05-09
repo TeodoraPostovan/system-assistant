@@ -10,10 +10,11 @@ export function App({ children }) {
 
   useEffect(() => {
     (async () => {
-      const userInfo = await api.get('/user/me');
-      // console.log(userInfo.data.user);
-      if (userInfo?.data?.user) {
+      try {
+        const userInfo = await api.get('/user/me');
         setUserInfo(userInfo.data.user);
+      } catch (error) {
+        setUserInfo({} as any);
       }
     })();
   }, [location]);
