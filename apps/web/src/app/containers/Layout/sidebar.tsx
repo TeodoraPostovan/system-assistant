@@ -7,9 +7,6 @@ import { useEffect } from 'react';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { AppContext } from '/home/eugen/system-assistant/apps/web/src/app/state/state';
-
 import { ChartBar as ChartBarIcon } from '../../icons/chart-bar';
 import { Cog as CogIcon } from '../../icons/cog';
 import { Lock as LockIcon } from '../../icons/lock';
@@ -19,6 +16,7 @@ import { User as UserIcon } from '../../icons/user';
 import { UserAdd as UserAddIcon } from '../../icons/user-add';
 import { Users as UsersIcon } from '../../icons/users';
 import { XCircle as XCircleIcon } from '../../icons/x-circle';
+import { AppContext } from '../../state/state';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
 
