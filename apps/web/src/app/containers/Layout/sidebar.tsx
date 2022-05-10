@@ -4,7 +4,11 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import { Box, Button, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
 import { useEffect } from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { AppContext } from '/home/eugen/system-assistant/apps/web/src/app/state/state';
 
 import { ChartBar as ChartBarIcon } from '../../icons/chart-bar';
 import { Cog as CogIcon } from '../../icons/cog';
@@ -78,6 +82,9 @@ const items = [
 
 export const DashboardSidebar = (props) => {
   const { open, onClose } = props;
+
+  const { userInfo } = useContext(AppContext);
+
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'), {
     defaultMatches: true,
     noSsr: false
@@ -117,10 +124,10 @@ export const DashboardSidebar = (props) => {
           >
             <div>
               <Typography color="inherit" variant="subtitle1">
-                Acme Inc
+                Assistant Dude
               </Typography>
               <Typography color="neutral.400" variant="body2">
-                Your tier : Premium
+                Your goal : {userInfo?.surveyData?.goal}
               </Typography>
             </div>
             <SelectorIcon
