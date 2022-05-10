@@ -1,7 +1,21 @@
 import styled from '@emotion/styled';
+import { Logout, Settings } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import { AppBar, Avatar, Badge, Box, IconButton, Toolbar, Tooltip } from '@mui/material';
+import {
+  AppBar,
+  Avatar,
+  Badge,
+  Box,
+  Divider,
+  IconButton,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Tooltip
+} from '@mui/material';
+import React from 'react';
 
 import { Bell as BellIcon } from '../../icons/bell';
 import { UserCircle as UserCircleIcon } from '../../icons/user-circle';
@@ -14,6 +28,14 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }: any) => ({
 
 export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <DashboardNavbarRoot
@@ -64,16 +86,77 @@ export const DashboardNavbar = (props) => {
             </Badge>
           </IconButton>
         </Tooltip>
-        <Avatar
-          sx={{
-            height: 40,
-            width: 40,
-            ml: 1
+        <Tooltip title={'Account Settings'}>
+          <Avatar
+            onClick={handleClick}
+            sx={{
+              height: 40,
+              width: 40,
+              ml: 1
+            }}
+            src="/static/images/avatars/avatar_1.png"
+            ria-controls={open ? 'account-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+          >
+            <UserCircleIcon fontSize="small" />
+          </Avatar>
+        </Tooltip>
+        <Menu
+          anchorEl={anchorEl}
+          id="account-menu"
+          open={open}
+          onClose={handleClose}
+          onClick={handleClose}
+          PaperProps={{
+            elevation: 0,
+            sx: {
+              overflow: 'visible',
+              filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+              mt: 1.5,
+              '& .MuiAvatar-root': {
+                width: 32,
+                height: 32,
+                ml: -0.5,
+                mr: 1
+              },
+              '&:before': {
+                content: '""',
+                display: 'block',
+                position: 'absolute',
+                top: 0,
+                right: 14,
+                width: 10,
+                height: 10,
+                bgcolor: 'background.paper',
+                transform: 'translateY(-50%) rotate(45deg)',
+                zIndex: 0
+              }
+            }
           }}
-          src="/static/images/avatars/avatar_1.png"
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          <UserCircleIcon fontSize="small" />
-        </Avatar>
+          <MenuItem>
+            <Avatar /> My Profile
+          </MenuItem>
+          <MenuItem>
+            <Avatar /> My analysis
+          </MenuItem>
+          <Divider />
+          <MenuItem>
+            <ListItemIcon>
+              <Settings fontSize="small" />
+            </ListItemIcon>
+            Settings
+          </MenuItem>
+          <MenuItem>
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            Sign Out
+          </MenuItem>
+        </Menu>
       </Toolbar>
     </DashboardNavbarRoot>
   );

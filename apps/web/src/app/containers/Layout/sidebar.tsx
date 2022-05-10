@@ -4,6 +4,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import { Box, Button, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
 import { useEffect } from 'react';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ChartBar as ChartBarIcon } from '../../icons/chart-bar';
@@ -15,6 +16,7 @@ import { User as UserIcon } from '../../icons/user';
 import { UserAdd as UserAddIcon } from '../../icons/user-add';
 import { Users as UsersIcon } from '../../icons/users';
 import { XCircle as XCircleIcon } from '../../icons/x-circle';
+import { AppContext } from '../../state/state';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
 
@@ -78,6 +80,9 @@ const items = [
 
 export const DashboardSidebar = (props) => {
   const { open, onClose } = props;
+
+  const { userInfo } = useContext(AppContext);
+
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'), {
     defaultMatches: true,
     noSsr: false
@@ -117,10 +122,10 @@ export const DashboardSidebar = (props) => {
           >
             <div>
               <Typography color="inherit" variant="subtitle1">
-                Acme Inc
+                Assistant Dude
               </Typography>
               <Typography color="neutral.400" variant="body2">
-                Your tier : Premium
+                Your goal : {userInfo?.surveyData?.goal}
               </Typography>
             </div>
             <SelectorIcon
