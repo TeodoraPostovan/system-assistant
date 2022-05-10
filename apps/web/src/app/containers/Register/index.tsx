@@ -61,11 +61,11 @@ const Register = () => {
       }}
     >
       <Container maxWidth="sm">
-        <Link to="/">
+        {/* <Link to="/">
           <Button component="button" startIcon={<ArrowBackIcon fontSize="small" />}>
             Dashboard
           </Button>
-        </Link>
+        </Link> */}
         <form onSubmit={formik.handleSubmit}>
           <Box sx={{ my: 3 }}>
             <Typography color="textPrimary" variant="h4">
@@ -101,7 +101,7 @@ const Register = () => {
           />
 
           <FormControl>
-            <FormLabel id="user-role">What role you want?</FormLabel>
+            <FormLabel id="user-role">What role will you have?</FormLabel>
             <RadioGroup
               row
               aria-labelledby="user-role"

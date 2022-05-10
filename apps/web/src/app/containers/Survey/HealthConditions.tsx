@@ -114,13 +114,13 @@ const intolerances = [
 ];
 
 const diets = [
-  ['Pescetarian', 'pescetarian'],
-  ['Lacto vegetarian', 'lacto vegetarian'],
-  ['Ovo vegetarian', 'ovo vegetarian'],
-  ['Vegan', 'vegan'],
-  ['Paleo', 'paleo'],
   ['Primal', 'primal'],
-  ['Vegetarian', 'vegetarian']
+  ['Paleo', 'paleo'],
+  ['Pescetarian', 'pescetarian'],
+  ['Vegan', 'vegan'],
+  ['Vegetarian', 'vegetarian'],
+  ['Ovo vegetarian', 'ovo vegetarian'],
+  ['Lacto vegetarian', 'lacto vegetarian']
 ];
 
 const diagnosis = [
@@ -128,7 +128,7 @@ const diagnosis = [
   'High blood pressure',
   'High cholesterol',
   'Depression',
-  'Eat disorders',
+  'Eating disorders',
   'Heart condition',
   'Kidney disease',
   'Liver disease',

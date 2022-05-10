@@ -17,8 +17,8 @@ const Login = () => {
   const { setUserInfo } = useContext(AppContext);
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
-      password: 'Password123'
+      email: '',
+      password: ''
     },
     validationSchema: Yup.object({
       email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
@@ -48,11 +48,11 @@ const Login = () => {
       }}
     >
       <Container maxWidth="sm">
-        <Link to="/">
+        {/* <Link to="/">
           <Button component="button" startIcon={<ArrowBackIcon fontSize="small" />}>
             Dashboard
           </Button>
-        </Link>
+        </Link> */}
         <form onSubmit={formik.handleSubmit}>
           <Box sx={{ my: 3 }}>
             <Typography color="textPrimary" variant="h4">
