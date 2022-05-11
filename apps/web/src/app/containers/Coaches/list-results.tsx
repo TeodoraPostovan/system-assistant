@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { api } from '../../api';
 import { getInitials } from '../../utils/get-initials';
+import { BASE_IMG_URL } from '../../utils/utils';
 
 export const CustomerListResults = ({ ...rest }) => {
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
@@ -121,7 +122,7 @@ export const CustomerListResults = ({ ...rest }) => {
                         display: 'flex'
                       }}
                     >
-                      <Avatar src={customer.avatarUrl} sx={{ mr: 2 }}>
+                      <Avatar src={`${BASE_IMG_URL}${customer.avatar}`} sx={{ mr: 2 }}>
                         {getInitials(customer.firstName + ' ' + customer.lastName)}
                       </Avatar>
                       <Typography color="textPrimary" variant="body1">

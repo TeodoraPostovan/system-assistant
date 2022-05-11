@@ -24,7 +24,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { AppContext } from '../../state/state';
-import { sleep } from '../../utils/utils';
+import { BASE_IMG_URL, sleep } from '../../utils/utils';
 import SocketManager from './chat.service';
 
 export default function () {
@@ -38,6 +38,9 @@ export default function () {
 
   const currentChatWithUser = userList.find((u) => u._id === selectedChat);
   const name = currentChatWithUser && currentChatWithUser.firstName + ' ' + currentChatWithUser.lastName;
+  const currentUserAvatar = currentChatWithUser
+    ? `${BASE_IMG_URL}${currentChatWithUser?.avatar}`
+    : 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b';
 
   useEffect(() => {
     if (!userInfo) {
@@ -112,6 +115,9 @@ export default function () {
           <ConversationList>
             {userList.map((user: any) => {
               const username = user.firstName + ' ' + user.lastName;
+              const avatar = user?.avatar
+                ? `${BASE_IMG_URL}${user.avatar}`
+                : 'https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b';
               return (
                 <Conversation
                   key={user._id}
@@ -121,11 +127,7 @@ export default function () {
                   onClick={() => openChat(user._id)}
                   active={user._id === selectedChat}
                 >
-                  <Avatar
-                    src="https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b"
-                    name={username}
-                    status={user.isOnline ? 'available' : 'unavailable'}
-                  />
+                  <Avatar src={avatar} name={username} status={user.isOnline ? 'available' : 'unavailable'} />
                 </Conversation>
               );
             })}
@@ -136,7 +138,7 @@ export default function () {
           <ChatContainer>
             <ConversationHeader>
               <ConversationHeader.Back />
-              <Avatar src="https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b" name={name} />
+              <Avatar src={currentUserAvatar} name={name} />
               <ConversationHeader.Content userName={name} info={currentChatWithUser?.isOnline ? 'online' : 'away'} />
             </ConversationHeader>
             <MessageList>
@@ -154,9 +156,7 @@ export default function () {
                       payload: msg.content
                     }}
                   >
-                    {direction === 'incoming' && (
-                      <Avatar src="https://images.unsplash.com/photo-1611915387288-fd8d2f5f928b" name={name} />
-                    )}
+                    {direction === 'incoming' && <Avatar src={currentUserAvatar} name={name} />}
                     <Message.Footer sender="" sentTime={sentTime} />
                   </Message>
                 );

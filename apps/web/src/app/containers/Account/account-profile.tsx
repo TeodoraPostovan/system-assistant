@@ -3,8 +3,7 @@ import { useCallback, useContext } from 'react';
 
 import { api } from '../../api';
 import { AppContext } from '../../state/state';
-
-const BASE_IMG_URL = 'http://localhost:3333';
+import { BASE_IMG_URL } from '../../utils/utils';
 
 export const AccountProfile = (props) => {
   const { userInfo, setUserInfo } = useContext(AppContext);

@@ -22,13 +22,12 @@ import { Bell as BellIcon } from '../../icons/bell';
 import { UserCircle as UserCircleIcon } from '../../icons/user-circle';
 import { Users as UsersIcon } from '../../icons/users';
 import { AppContext } from '../../state/state';
+import { BASE_IMG_URL } from '../../utils/utils';
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }: any) => ({
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[3]
 }));
-
-const BASE_IMG_URL = 'http://localhost:3333';
 
 export const DashboardNavbar = (props) => {
   const { userInfo } = useContext(AppContext);
@@ -106,7 +105,6 @@ export const DashboardNavbar = (props) => {
               width: 40,
               ml: 1
             }}
-            // src="/static/images/avatars/avatar_1.png"
             src={`${BASE_IMG_URL}${userInfo?.avatar}`}
             ria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"

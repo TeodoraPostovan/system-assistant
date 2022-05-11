@@ -28,11 +28,11 @@ import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import SwipeableViews from 'react-swipeable-views';
 
+import { BASE_IMG_URL } from '../../utils/utils';
+
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
-
-const BASE_IMG_URL = 'http://localhost:3333';
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props;
