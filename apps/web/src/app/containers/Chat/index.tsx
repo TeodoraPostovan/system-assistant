@@ -66,7 +66,7 @@ export default function () {
       });
 
       SocketManager.connect()
-        .then(() => sleep(200))
+        .then(() => sleep(500))
         .then(() => {
           setSocketReady(true);
         });
