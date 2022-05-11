@@ -27,8 +27,6 @@ export class _ExercisesCollection {
       query.category = { $in: goalArr };
     }
 
-    console.log('query', query);
-
     return this.collection.find(query).toArray();
   }
 
