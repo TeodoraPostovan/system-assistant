@@ -114,7 +114,7 @@ export const AppState = ({ children }) => {
 
   useEffect(() => {
     fetchActivity();
-  }, [selectedDate]);
+  }, [selectedDate, userInfo]);
 
   console.log(contextValue);
 

@@ -15,18 +15,25 @@ import {
   Toolbar,
   Tooltip
 } from '@mui/material';
-import React from 'react';
+import React, { useCallback, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Bell as BellIcon } from '../../icons/bell';
 import { UserCircle as UserCircleIcon } from '../../icons/user-circle';
 import { Users as UsersIcon } from '../../icons/users';
+import { AppContext } from '../../state/state';
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }: any) => ({
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[3]
 }));
 
+const BASE_IMG_URL = 'http://localhost:3333';
+
 export const DashboardNavbar = (props) => {
+  const { userInfo } = useContext(AppContext);
+  const navigate = useNavigate();
+
   const { onSidebarOpen, ...other } = props;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -36,6 +43,11 @@ export const DashboardNavbar = (props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const logout = useCallback(() => {
+    localStorage.removeItem('authToken');
+    navigate('/login');
+  }, []);
 
   return (
     <DashboardNavbarRoot
@@ -95,6 +107,7 @@ export const DashboardNavbar = (props) => {
               ml: 1
             }}
             // src="/static/images/avatars/avatar_1.png"
+            src={`${BASE_IMG_URL}${userInfo?.avatar}`}
             ria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
@@ -150,7 +163,7 @@ export const DashboardNavbar = (props) => {
             </ListItemIcon>
             Settings
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={logout}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>

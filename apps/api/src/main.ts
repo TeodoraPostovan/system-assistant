@@ -1,6 +1,7 @@
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as express from 'express';
+import * as fileUpload from 'express-fileupload';
 import * as http from 'http';
 import * as path from 'path';
 
@@ -19,6 +20,12 @@ async function start() {
   const app = express();
   app.use(bodyParser.json());
   app.use(cors());
+  app.use(
+    fileUpload({
+      preserveExtension: true,
+      tempFileDir: '/tmp/fileupload'
+    })
+  );
 
   const server = http.createServer(app);
   await socketServer(server);
