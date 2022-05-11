@@ -1,16 +1,12 @@
+import BoltIcon from '@mui/icons-material/Bolt';
 import { Avatar, Chip, List, ListItem, ListItemAvatar, ListItemText, Paper } from '@mui/material';
-import { CardActionArea } from '@mui/material';
-import Autocomplete from '@mui/material/Autocomplete';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
-import throttle from 'lodash/throttle';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import * as React from 'react';
 
 interface Food {
   food_name: string;
@@ -25,42 +21,15 @@ interface Food {
   locale: string;
 }
 
-export default function ({ meal, onChange }) {
-  const [info, setInfo] = useState();
-
-  useEffect(() => {
-    (async () => {
-      if (!meal) {
-        return;
-      }
-
-      const info = await getInfo(meal);
-      setInfo(info);
-      onChange(info);
-    })();
-  }, [meal]);
-
-  const getInfo = useCallback(async (params) => {
-    const res = await axios.post(
-      'https://trackapi.nutritionix.com/v2/natural/nutrients',
-      {
-        query: params.food_name
-      },
-      {
-        headers: {
-          'x-app-id': 'ff9a3bdb',
-          'x-app-key': '8bda8469b0cb3b9ac91ecb4e3e6d10af'
-        }
-      }
-    );
-
-    return res.data.foods[0];
-  }, []);
-
-  return info ? <Description key={meal.food_name} {...info} /> : null;
+export default function ({ meal }) {
+  return meal && <Description key={meal.food_name} {...meal} />;
 }
 
 const nutrients = {
+  nf_calories: {
+    unit: 'kcal',
+    name: 'Energy'
+  },
   nf_total_carbohydrate: {
     unit: 'g',
     name: 'Carbohydrate, by difference'
@@ -112,10 +81,6 @@ const nutrients = {
   nf_vitamin_d_mcg: {
     unit: 'IU',
     name: 'Vitamin D'
-  },
-  nf_calories: {
-    unit: 'kcal',
-    name: 'Energy'
   }
 };
 
@@ -124,49 +89,51 @@ function Description(props) {
     return Object.keys(nutrients)
       .filter((key) => !!props[key])
       .map((key) => {
-        const text = `${nutrients[key].name}: ${props[key]} ${nutrients[key].unit}`;
-        if (nutrients[key].name === 'Energy') {
-          return (
-            <ListItem key={text}>
-              <Chip key={key} label={text} variant="filled" />
-            </ListItem>
-          );
+        const label = `${nutrients[key].name}: ${props[key]} ${nutrients[key].unit}`;
+        const chip: any = {
+          color: 'primary',
+          label,
+          key,
+          size: 'small',
+          variant: 'outlined'
+        };
+
+        if (key === 'nf_calories') {
+          chip.color = undefined;
+          chip.icon = <BoltIcon />;
         }
-        return (
-          <ListItem key={text}>
-            <Chip key={text} label={text} variant="outlined" />
-          </ListItem>
-        );
+
+        return chip;
       });
   }, [props]);
 
   return (
     <Card>
-      <CardMedia component="img" height="auto" image={props.photo.highres} />
+      <CardMedia component="img" height="255" image={props.photo.highres} sx={{ objectFit: 'contain' }} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {props.food_name}
         </Typography>
-        {/* <Chip label="Chip Outlined" variant="outlined" /> */}
-
         <Typography variant="body2" color="text.secondary">
-          {props.serving_unit}
+          {props.serving_unit} {props.serving_weight_grams}g
         </Typography>
-        <Paper
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            listStyle: 'none',
-            p: 0.5,
-            m: 0,
-            boxShadow: 'none'
-          }}
-          component="ul"
-        >
-          {chips}
-        </Paper>
+        <Chips list={chips} />
       </CardContent>
     </Card>
+  );
+}
+
+function Chips({ list }) {
+  return (
+    <List sx={{ display: 'flex', flexWrap: 'wrap' }}>
+      {list.map((data) => {
+        const { key, ...rest } = data;
+        return (
+          <ListItem key={data.key} sx={{ padding: '4px', width: 'auto' }}>
+            <Chip {...rest} />
+          </ListItem>
+        );
+      })}
+    </List>
   );
 }

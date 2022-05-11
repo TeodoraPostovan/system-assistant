@@ -1,16 +1,11 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import BoltIcon from '@mui/icons-material/Bolt';
-import { Box, Chip, TextField } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
+import { Box, Card, CardContent, Chip, Grid, TextField } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
-import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
-import { Fragment } from 'react';
 import { useCallback, useContext, useState } from 'react';
 
 import { AppContext } from '../../state/state';
@@ -35,7 +30,7 @@ export default function () {
   );
 
   return (
-    <Box>
+    <Box sx={{ width: '100%' }}>
       <form onSubmit={onSubmit} style={{ display: 'flex', alignItems: 'center' }}>
         <TextField
           label="Your activity"
@@ -43,57 +38,56 @@ export default function () {
           type="text"
           sx={{ minWidth: '400px' }}
           value={value}
+          helperText="What activity did you do? For example, 30 minutes run, or 1 hour yoga"
           onChange={(e) => setValue(e.target.value)}
         />
         {loading && <CircularProgress size={30} sx={{ marginLeft: '20px' }} />}
       </form>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-          listStyle: 'none',
-          p: 0.5,
-          m: 0,
-          boxShadow: 'none'
-        }}
-      >
-        <ActivityItems items={exercises} />
-      </Box>
+      <ActivityItems items={exercises} />
     </Box>
   );
 }
 
 function ActivityItems(props) {
+  const renderChips = (item) => [
+    {
+      color: 'primary',
+      label: `${item.duration_min} minutes`,
+      key: 'duration_min',
+      icon: <AccessTimeIcon />,
+      size: 'small',
+      variant: 'outlined'
+    },
+    {
+      color: 'primary',
+      label: `Burned ${item.nf_calories} calories`,
+      key: 'nf_calories',
+      icon: <BoltIcon />,
+      size: 'small',
+      variant: 'outlined'
+    }
+  ];
+
   return (
-    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-      {props.items.map((item) => {
+    <Grid container spacing={2}>
+      {props.items.map((item, i) => {
         return (
-          <Fragment key={item.name}>
-            <ListItem alignItems="flex-start">
-              <ListItemAvatar>
-                <Avatar src={item.photo.thumb} />
-              </ListItemAvatar>
-              <ListItemText
-                primary={item.name}
-                secondary={
-                  <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
-                    {item.query}
-                  </Typography>
-                }
-              />
-              {item.duration_min && (
-                <Chip icon={<AccessTimeIcon />} label={`${item.duration_min} minutes`} variant="outlined" />
-              )}
-              {item.nf_calories && (
-                <Chip icon={<BoltIcon />} label={`Burned ${item.nf_calories} calories`} variant="outlined" />
-              )}
-            </ListItem>
-            <Divider variant="inset" component="li" />
-          </Fragment>
+          <Grid item xs={3} key={item.name + i}>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardContent sx={{ py: '16px', px: '12px' }}>
+                <Typography gutterBottom variant="h5" component="div">
+                  {item.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {item.query}
+                </Typography>
+              </CardContent>
+              <Chips list={renderChips(item)} />
+            </Card>
+          </Grid>
         );
       })}
-    </List>
+    </Grid>
   );
 }
 
@@ -112,4 +106,19 @@ async function fetchExercises(query: string) {
   );
 
   return res.data.exercises[0];
+}
+
+function Chips({ list }) {
+  return (
+    <List sx={{ display: 'flex', flexDirection: 'column' }}>
+      {list.map((data) => {
+        const { key, ...rest } = data;
+        return (
+          <ListItem key={data.key} sx={{ padding: '4px', width: 'auto' }}>
+            <Chip {...rest} />
+          </ListItem>
+        );
+      })}
+    </List>
+  );
 }

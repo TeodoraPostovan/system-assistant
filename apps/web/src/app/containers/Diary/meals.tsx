@@ -67,13 +67,17 @@ export default function () {
 
 function AccordionItem(props: any) {
   const { title, active, onChange, onClick, items } = props;
+  const totalCalories = Math.round(items.reduce((s, item) => s + item.nf_calories, 0));
   const subtitle = items.length === 1 ? `${items.length} meal` : `${items.length} meals`;
 
   return (
     <Accordion expanded={active} onChange={onChange} sx={{ width: '100%' }}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography sx={{ width: '33%', flexShrink: 0 }}>{title}</Typography>
-        <Typography sx={{ color: 'text.secondary' }}>{subtitle}</Typography>
+        <Typography sx={{ color: 'text.secondary' }}>
+          {subtitle}
+          {totalCalories > 0 && `; Total calories: ${totalCalories}`}
+        </Typography>
       </AccordionSummary>
       <AccordionDetails>
         <ItemsList items={items} />

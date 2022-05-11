@@ -43,15 +43,23 @@ export default async function init(server: http.Server) {
 
     const allSockets = (await io.fetchSockets()).map((s: any) => s.sessionID);
     const users = await UsersCollection.collection.find({ role: role === 'coach' ? 'user' : 'coach' }).toArray();
-    const usersSafe = users.map((u) => {
+    const usersSafe = users.map(async (u) => {
       const { password, ...rest } = u;
+
       return {
         ...rest,
-        isOnline: allSockets.includes(u._id + '')
+        isOnline: allSockets.includes(u._id + ''),
+        lastMsg: (
+          await ChatHistoryCollection.collection
+            .find({ $or: [{ from: u._id + '' }, { to: u._id + '' }] })
+            .sort({ ts: -1 })
+            .limit(1)
+            .toArray()
+        )[0]
       };
     });
 
-    socket.emit('users', usersSafe);
+    socket.emit('users', await Promise.all(usersSafe));
 
     // notify existing users
     socket.broadcast.emit('user connected', sessionID);

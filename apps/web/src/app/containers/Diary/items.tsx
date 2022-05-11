@@ -10,9 +10,9 @@ import { Fragment } from 'react';
 export default function (props) {
   return (
     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-      {props.items.map((item) => {
+      {props.items.map((item, i) => {
         return (
-          <Fragment key={item.food_name}>
+          <Fragment key={item.food_name + i}>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar src={item.photo.thumb} />

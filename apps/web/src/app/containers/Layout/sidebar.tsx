@@ -128,13 +128,13 @@ export const DashboardSidebar = (props) => {
                 Your goal : {userInfo?.surveyData?.goal}
               </Typography>
             </div>
-            <SelectorIcon
+            {/* <SelectorIcon
               sx={{
                 color: 'neutral.500',
                 width: 14,
                 height: 14
               }}
-            />
+            /> */}
           </Box>
         </Box>
       </div>
@@ -161,6 +161,7 @@ export const DashboardSidebar = (props) => {
         PaperProps={{
           sx: {
             backgroundColor: '#111827',
+            // backgroundColor: 'primary.dark',
             color: '#FFFFFF',
             width: 280
           }

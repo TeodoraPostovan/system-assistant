@@ -1,4 +1,4 @@
-import { eachDayOfInterval, endOfDay, endOfWeek, startOfDay, startOfWeek, subDays } from 'date-fns';
+import { eachDayOfInterval, endOfDay, endOfWeek, isFuture, startOfDay, startOfWeek, subDays } from 'date-fns';
 import { zonedTimeToUtc } from 'date-fns-tz';
 
 import Mongo from './index';
@@ -9,7 +9,7 @@ export class _ActivityCollection {
   }
 
   async getWeeklyMetrics(userId: string, ts: number) {
-    const start = zonedTimeToUtc(subDays(startOfDay(ts), 7), 'UTC');
+    const start = zonedTimeToUtc(subDays(startOfDay(ts), 6), 'UTC');
     const end = zonedTimeToUtc(endOfDay(ts), 'UTC');
     const results = await this.collection
       .find({
@@ -21,9 +21,9 @@ export class _ActivityCollection {
       })
       .toArray();
 
-    const intervalRange = eachDayOfInterval({ start: subDays(ts, 6), end: zonedTimeToUtc(subDays(ts, 1), 'UTC') }).map(
-      (d) => zonedTimeToUtc(d, 'UTC')
-    );
+    const intervalRange = eachDayOfInterval({ start, end })
+      .filter((d) => !isFuture(d))
+      .map((d) => zonedTimeToUtc(d, 'UTC'));
 
     const dateMap = intervalRange.reduce((acc, date) => {
       acc[+date] = [];

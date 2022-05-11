@@ -7,7 +7,7 @@ import { AppContext } from '../../../state/state';
 export const ExerciseProgress = (props) => {
   const { dailyMetrics } = useContext(AppContext);
 
-  const value = Math.round(((dailyMetrics?.exerciseDuration || 0) * 100) / 60);
+  const value = Math.min(Math.round(((dailyMetrics?.exerciseDuration || 0) * 100) / 60), 100);
 
   return (
     <Card sx={{ height: '100%' }} {...props}>

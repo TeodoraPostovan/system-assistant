@@ -40,6 +40,9 @@ export default function () {
   const name = currentChatWithUser && currentChatWithUser.firstName + ' ' + currentChatWithUser.lastName;
 
   useEffect(() => {
+    if (!userInfo) {
+      return;
+    }
     const { _id, email, role } = userInfo;
     if (_id && email) {
       SocketManager.client.auth = {
@@ -59,6 +62,7 @@ export default function () {
 
       SocketManager.client.on('private message', (ev) => {
         setHistory((prevHistory) => [...prevHistory, ev]);
+        setUserList((prev) => prev.map((u) => (u._id === ev.from || u._id === ev.to ? { ...u, lastMsg: ev } : u)));
       });
 
       SocketManager.connect()
@@ -108,13 +112,12 @@ export default function () {
           <ConversationList>
             {userList.map((user: any) => {
               const username = user.firstName + ' ' + user.lastName;
-              const lastMsg = history.find((h) => h.from === user._id)?.content || '';
               return (
                 <Conversation
                   key={user._id}
                   name={username}
                   // lastSenderName={username}
-                  info={lastMsg}
+                  info={user.lastMsg?.content || ''}
                   onClick={() => openChat(user._id)}
                   active={user._id === selectedChat}
                 >

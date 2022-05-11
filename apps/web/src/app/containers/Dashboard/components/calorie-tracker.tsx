@@ -79,7 +79,10 @@ export const CalorieTracker = (props) => {
     return null;
   }
 
-  const dailyCaloriesPercent = Math.round((dailyMetrics.calories * 100) / dailyMetrics.dailySuggestedCalories);
+  const dailyCaloriesPercent = Math.min(
+    Math.round((dailyMetrics.calories * 100) / dailyMetrics.dailySuggestedCalories),
+    100
+  );
 
   return (
     <Card sx={{ height: '100%' }} {...props}>

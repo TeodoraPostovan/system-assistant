@@ -70,7 +70,7 @@ export default function (props) {
 
   return (
     <Autocomplete
-      sx={{ width: 300 }}
+      fullWidth
       open={open}
       onOpen={() => {
         setOpen(true);

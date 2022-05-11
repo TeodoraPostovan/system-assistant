@@ -11,8 +11,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import axios from 'axios';
 import * as React from 'react';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import MealAutocomplete from './meal-autocomplete';
 import MealInfo from './meal-info';
@@ -32,19 +33,48 @@ export default function (props: DialogProps) {
 
   const handleClose = (ev?) => {
     onClose(ev);
+    setMealInfo(null);
     console.log(ev);
   };
+
+  useEffect(() => {
+    (async () => {
+      if (!meal) {
+        return;
+      }
+
+      const info = await getInfo(meal);
+      setMealInfo(info);
+    })();
+  }, [meal]);
+
+  const getInfo = useCallback(async (params) => {
+    const res = await axios.post(
+      'https://trackapi.nutritionix.com/v2/natural/nutrients',
+      {
+        query: params.food_name
+      },
+      {
+        headers: {
+          'x-app-id': 'ff9a3bdb',
+          'x-app-key': '8bda8469b0cb3b9ac91ecb4e3e6d10af'
+        }
+      }
+    );
+
+    return res.data.foods[0];
+  }, []);
 
   // const handleListItemClick = (value: string) => {
   //   onClose(value);
   // };
 
   return (
-    <Dialog onClose={handleClose} open={open}>
+    <Dialog onClose={handleClose} open={open} fullWidth maxWidth="md">
       <DialogTitle>{props.title}</DialogTitle>
       <DialogContent>
         <MealAutocomplete onChange={setMeal} />
-        <MealInfo meal={meal} onChange={setMealInfo} />
+        {mealInfo && <MealInfo meal={mealInfo} />}
       </DialogContent>
       <DialogActions>
         <Button onClick={() => handleClose()}>Cancel</Button>
