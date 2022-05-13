@@ -25,6 +25,7 @@ router.get('/recommendations', async (req: Request, res: Response) => {
 
     const params = {
       addRecipeNutrition: true,
+      number: 100,
       intolerances: userInfo.surveyData?.allergies?.join(',') || '',
       diet: userInfo.surveyData?.diets?.join(',') || ''
     };
@@ -41,6 +42,7 @@ router.get('/recommendations', async (req: Request, res: Response) => {
     });
 
     res.send(response.data.results);
+    // console.log(response.data.results);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: serializeError(error) });
