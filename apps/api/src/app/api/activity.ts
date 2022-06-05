@@ -95,9 +95,9 @@ function calculateDailyMetrics(meals: any, sports: any, surveyData: any) {
   if (surveyData.activityLevel === 'sedentary') {
     dailySuggestedCalories = BMR * 1.2;
   } else if (surveyData.activityLevel === 'active') {
-    dailySuggestedCalories = BMR * 1.375;
-  } else if (surveyData.activityLevel === 'extremely_active') {
     dailySuggestedCalories = BMR * 1.55;
+  } else if (surveyData.activityLevel === 'extremely_active') {
+    dailySuggestedCalories = BMR * 1.9;
   }
 
   metrics.BMR = Math.round(BMR);
