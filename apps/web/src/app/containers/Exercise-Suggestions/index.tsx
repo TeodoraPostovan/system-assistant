@@ -35,7 +35,7 @@ export default function Suggestions() {
           </Typography>
           <Grid container spacing={3}>
             {suggestions.slice(page * perPage, (page + 1) * perPage).map((product) => (
-              <Grid item key={product._id} lg={4} md={6} xs={12}>
+              <Grid item key={product._id} lg={3} md={6} xs={12}>
                 <ExerciseCard product={product} />
               </Grid>
             ))}
