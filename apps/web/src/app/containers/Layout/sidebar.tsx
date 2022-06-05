@@ -122,10 +122,10 @@ export const DashboardSidebar = (props) => {
           >
             <div>
               <Typography color="inherit" variant="subtitle1">
-                Assistant Dude
+                {userInfo?.firstName} {userInfo?.lastName}
               </Typography>
               <Typography color="neutral.400" variant="body2">
-                Your goal : {userInfo?.surveyData?.goal}
+                Your goal: {userInfo?.surveyData?.goal}
               </Typography>
             </div>
             {/* <SelectorIcon
