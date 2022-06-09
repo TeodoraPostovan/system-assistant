@@ -38,7 +38,7 @@ const Register = () => {
         const userData = await api.post('/auth/register', value);
         setUserInfo(userData.data.user);
 
-        if (userData.data.user.surveyData || userData.data.user.role === 'coach') {
+        if (userData.data.user.surveyData) {
           navigate('/');
         } else {
           navigate('/survey');

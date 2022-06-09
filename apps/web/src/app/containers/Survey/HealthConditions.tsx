@@ -110,7 +110,8 @@ const intolerances = [
   ['Soy', 'soy'],
   ['Sulfite', 'sulfite'],
   ['Tree nut', 'tree nut'],
-  ['Wheat', 'wheat']
+  ['Wheat', 'wheat'],
+  ['None', 'none']
 ];
 
 const diets = [
@@ -120,7 +121,8 @@ const diets = [
   ['Vegan', 'vegan'],
   ['Vegetarian', 'vegetarian'],
   ['Ovo vegetarian', 'ovo vegetarian'],
-  ['Lacto vegetarian', 'lacto vegetarian']
+  ['Lacto vegetarian', 'lacto vegetarian'],
+  ['None', 'none']
 ];
 
 const diagnosis = [
