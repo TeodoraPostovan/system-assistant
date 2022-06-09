@@ -55,11 +55,6 @@ export const DashboardSidebar = (props) => {
       title: 'Coaches'
     }: null,
     {
-      href: '/coaches',
-      icon: <UsersIcon fontSize="small" />,
-      title: 'Clients'
-    },
-    {
       href: '/chat',
       icon: <ChatIcon fontSize="small" />,
       title: 'Chat'
