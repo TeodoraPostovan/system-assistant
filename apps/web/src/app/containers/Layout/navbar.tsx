@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { Logout, Settings } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
+import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import {
   AppBar,
@@ -46,7 +47,15 @@ export const DashboardNavbar = (props) => {
   const logout = useCallback(() => {
     localStorage.removeItem('authToken');
     navigate('/login');
-  }, []);
+  }, [navigate]);
+
+  const profile = useCallback(() => {
+    navigate('/account');
+  }, [navigate]);
+
+  const survey = useCallback(() => {
+    navigate('/survey');
+  }, [navigate]);
 
   return (
     <DashboardNavbarRoot
@@ -148,14 +157,17 @@ export const DashboardNavbar = (props) => {
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          <MenuItem>
+          <MenuItem onClick={profile}>
             <Avatar /> My Profile
           </MenuItem>
           <MenuItem>
-            <Avatar /> My analysis
+            <ListItemIcon>
+              <NoteAltIcon fontSize="small" />
+            </ListItemIcon>
+            Notes
           </MenuItem>
           <Divider />
-          <MenuItem>
+          <MenuItem onClick={survey}>
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>
