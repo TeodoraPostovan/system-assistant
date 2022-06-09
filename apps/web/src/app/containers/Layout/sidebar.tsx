@@ -3,6 +3,7 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import { Box, Button, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
+import { isNull } from 'lodash';
 import { useEffect } from 'react';
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
@@ -20,73 +21,62 @@ import { AppContext } from '../../state/state';
 import { Logo } from './logo';
 import { NavItem } from './nav-item';
 
-const items = [
-  {
-    href: '/',
-    icon: <ChartBarIcon fontSize="small" />,
-    title: 'Dashboard'
-  },
-  {
-    href: '/account',
-    icon: <UserIcon fontSize="small" />,
-    title: 'Account'
-  },
-  {
-    href: '/mydiary',
-    icon: <ShoppingBagIcon fontSize="small" />,
-    title: 'My diary'
-  },
-  {
-    href: '/coaches',
-    icon: <UsersIcon fontSize="small" />,
-    title: 'Coaches'
-  },
-  {
-    href: '/chat',
-    icon: <ChatIcon fontSize="small" />,
-    title: 'Chat'
-  },
-  {
-    href: '/recipe-suggestions',
-    icon: <RestaurantIcon fontSize="small" />,
-    title: 'Recipes'
-  },
-  {
-    href: '/exercise-suggestions',
-    icon: <FitnessCenterIcon fontSize="small" />,
-    title: 'Exercises'
-  }
-  // {
-  //   href: '/settings',
-  //   icon: <CogIcon fontSize="small" />,
-  //   title: 'Settings'
-  // },
-  // {
-  //   href: '/login',
-  //   icon: <LockIcon fontSize="small" />,
-  //   title: 'Login'
-  // },
-  // {
-  //   href: '/register',
-  //   icon: <UserAddIcon fontSize="small" />,
-  //   title: 'Register'
-  // },
-  // {
-  //   href: '/404',
-  //   icon: <XCircleIcon fontSize="small" />,
-  //   title: 'Error'
-  // }
-];
-
 export const DashboardSidebar = (props) => {
   const { open, onClose } = props;
 
-  const { userInfo } = useContext(AppContext);
+  const { userInfo, role } = useContext(AppContext);
 
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'), {
     defaultMatches: true,
     noSsr: false
   });
+
+
+  const items = [
+    {
+      href: '/',
+      icon: <ChartBarIcon fontSize="small" />,
+      title: 'Dashboard'
+    },
+    {
+      href: '/account',
+      icon: <UserIcon fontSize="small" />,
+      title: 'Account'
+    },
+    {
+      href: '/mydiary',
+      icon: <ShoppingBagIcon fontSize="small" />,
+      title: 'My diary'
+    },
+    userInfo?.role === 'user' ?
+    {
+      href: '/coaches',
+      icon: <UsersIcon fontSize="small" />,
+      title: 'Coaches'
+    }: null,
+    {
+      href: '/coaches',
+      icon: <UsersIcon fontSize="small" />,
+      title: 'Clients'
+    },
+    {
+      href: '/chat',
+      icon: <ChatIcon fontSize="small" />,
+      title: 'Chat'
+    },
+    userInfo?.role === 'user' ?
+    {
+      href: '/recipe-suggestions',
+      icon: <RestaurantIcon fontSize="small" />,
+      title: 'Recipes'
+    }: null,
+    userInfo?.role === 'user' ?
+    {
+      href: '/exercise-suggestions',
+      icon: <FitnessCenterIcon fontSize="small" />,
+      title: 'Exercises'
+    }: null
+  ].filter(Boolean);
 
   const content = (
     <Box
