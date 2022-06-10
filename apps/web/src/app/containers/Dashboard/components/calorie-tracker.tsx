@@ -110,7 +110,7 @@ export const CalorieTracker = (props) => {
             {dailyMetrics.calories} kcal/{dailyMetrics.dailySuggestedCalories} kcal
           </Typography>
           <LinearProgress value={dailyCaloriesPercent} variant="determinate" />
-          <Typography color="textSecondary" variant="body2">
+          <Typography color="textSecondary" variant="body1">
             {dailyCaloriesPercent}% of daily recommended calories consumed
           </Typography>
         </Box>
