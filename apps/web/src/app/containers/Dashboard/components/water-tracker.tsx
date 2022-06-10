@@ -82,7 +82,7 @@ export const WaterTracker = (props) => {
           </Grid>
         </Grid>
 
-        <Box sx={{ pt: 3 }}>
+        <Box sx={{ pt: 10 }}>
           <Box sx={{ display: 'flex' }}>
             <Box sx={{ flexGrow: 1 }}>
               <WaterDropContainer>
@@ -107,18 +107,19 @@ export const WaterTracker = (props) => {
           </Box>
         </Box>
       </CardContent>
-      <Box sx={{ flexGrow: 1 }} />
-      <CardActions>
-        <Button onClick={() => clickHandler(100)} variant="outlined">
-          + 100ml
-        </Button>
-        <Button onClick={() => clickHandler(200)} variant="outlined">
-          + 200ml
-        </Button>
-        <Button onClick={() => clickHandler(500)} variant="outlined">
-          + 500ml
-        </Button>
-      </CardActions>
+      <Grid container spacing={1} sx={{ justifyContent: 'center', paddingTop: 5 }}>
+        <CardActions>
+          <Button onClick={() => clickHandler(100)} variant="outlined">
+            + 100ml
+          </Button>
+          <Button onClick={() => clickHandler(200)} variant="outlined">
+            + 200ml
+          </Button>
+          <Button onClick={() => clickHandler(500)} variant="outlined">
+            + 500ml
+          </Button>
+        </CardActions>
+      </Grid>
     </Card>
   );
 };
