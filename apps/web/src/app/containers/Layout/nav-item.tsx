@@ -38,6 +38,7 @@ export const NavItem = (props) => {
             borderRadius: 1,
             flexGrow: 1,
             color: active ? 'secondary.main' : '#9CA3AF',
+            fontSize: '16px',
             fontWeight: active && 'fontWeightBold',
             justifyContent: 'flex-start',
             px: 3,

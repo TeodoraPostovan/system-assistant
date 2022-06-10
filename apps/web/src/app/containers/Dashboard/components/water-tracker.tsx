@@ -115,8 +115,8 @@ export const WaterTracker = (props) => {
         <Button onClick={() => clickHandler(200)} variant="outlined">
           + 200ml
         </Button>
-        <Button onClick={() => clickHandler(300)} variant="outlined">
-          + 400ml
+        <Button onClick={() => clickHandler(500)} variant="outlined">
+          + 500ml
         </Button>
       </CardActions>
     </Card>

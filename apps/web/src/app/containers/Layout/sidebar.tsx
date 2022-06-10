@@ -31,7 +31,6 @@ export const DashboardSidebar = (props) => {
     noSsr: false
   });
 
-
   const items = [
     {
       href: '/',
@@ -48,29 +47,32 @@ export const DashboardSidebar = (props) => {
       icon: <ShoppingBagIcon fontSize="small" />,
       title: 'My diary'
     },
-    userInfo?.role === 'user' ?
-    {
-      href: '/coaches',
-      icon: <UsersIcon fontSize="small" />,
-      title: 'Coaches'
-    }: null,
+    userInfo?.role === 'user'
+      ? {
+          href: '/coaches',
+          icon: <UsersIcon fontSize="small" />,
+          title: 'Coaches'
+        }
+      : null,
     {
       href: '/chat',
       icon: <ChatIcon fontSize="small" />,
       title: 'Chat'
     },
-    userInfo?.role === 'user' ?
-    {
-      href: '/recipe-suggestions',
-      icon: <RestaurantIcon fontSize="small" />,
-      title: 'Recipes'
-    }: null,
-    userInfo?.role === 'user' ?
-    {
-      href: '/exercise-suggestions',
-      icon: <FitnessCenterIcon fontSize="small" />,
-      title: 'Exercises'
-    }: null
+    userInfo?.role === 'user'
+      ? {
+          href: '/recipe-suggestions',
+          icon: <RestaurantIcon fontSize="small" />,
+          title: 'Recipes'
+        }
+      : null,
+    userInfo?.role === 'user'
+      ? {
+          href: '/exercise-suggestions',
+          icon: <FitnessCenterIcon fontSize="small" />,
+          title: 'Exercises'
+        }
+      : null
   ].filter(Boolean);
 
   const content = (

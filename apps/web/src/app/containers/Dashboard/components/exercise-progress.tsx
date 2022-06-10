@@ -24,7 +24,7 @@ export const ExerciseProgress = (props) => {
           <Grid item>
             <Avatar
               sx={{
-                backgroundColor: 'warning.main',
+                backgroundColor: 'success.main',
                 height: 56,
                 width: 56
               }}
