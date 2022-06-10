@@ -74,6 +74,7 @@ function calculateDailyMetrics(meals: any, sports: any, surveyData: any) {
     carbs: 0,
     fat: 0,
     exerciseDuration: 0,
+    burnedCalories: 0,
     calories: 0,
     dailySuggestedCalories: 0,
     BMR: 0,
@@ -130,7 +131,7 @@ function calculateDailyMetrics(meals: any, sports: any, surveyData: any) {
       metrics.exerciseDuration += sport.duration_min;
     }
     if (typeof sport.nf_calories === 'number') {
-      metrics.calories += sport.nf_calories;
+      metrics.burnedCalories += sport.nf_calories;
     }
   });
 
@@ -139,6 +140,7 @@ function calculateDailyMetrics(meals: any, sports: any, surveyData: any) {
   metrics.fat = Math.round(metrics.fat);
   metrics.calories = Math.round(metrics.calories);
   metrics.exerciseDuration = Math.round(metrics.exerciseDuration);
+  metrics.burnedCalories = Math.round(metrics.burnedCalories);
 
   return metrics;
 }
